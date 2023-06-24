@@ -52,9 +52,8 @@ public class ControllerJeu {
     @Autowired
     private ActionService unActionService;
 
-    @CrossOrigin(origins = "*")
     @GetMapping(value = "/choixApprenant")
-    public ResponseEntity<?> selectionnerApprenant(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> selectionnerApprenant() {
         try {
             List<UtilisateurDTO> listeApprenants = ServiceUtilisateur.getAllApprenant();
             return ResponseEntity.ok(listeApprenants);

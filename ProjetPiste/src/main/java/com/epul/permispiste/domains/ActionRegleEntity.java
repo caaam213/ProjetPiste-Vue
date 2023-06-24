@@ -1,0 +1,64 @@
+package com.epul.permispiste.domains;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "action__regle", schema = "projetpermis1", catalog = "")
+public class ActionRegleEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id")
+    private int id;
+    @Basic
+    @Column(name = "fk_action", insertable = false, updatable = false)
+    private Integer fkAction;
+    @Basic
+    @Column(name = "fk_regle", insertable = false, updatable = false)
+    private Integer fkRegle;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Integer getFkAction() {
+        return fkAction;
+    }
+
+    public void setFkAction(Integer fkAction) {
+        this.fkAction = fkAction;
+    }
+
+    public Integer getFkRegle() {
+        return fkRegle;
+    }
+
+    public void setFkRegle(Integer fkRegle) {
+        this.fkRegle = fkRegle;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ActionRegleEntity that = (ActionRegleEntity) o;
+
+        if (id != that.id) return false;
+        if (fkAction != null ? !fkAction.equals(that.fkAction) : that.fkAction != null) return false;
+        if (fkRegle != null ? !fkRegle.equals(that.fkRegle) : that.fkRegle != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (fkAction != null ? fkAction.hashCode() : 0);
+        result = 31 * result + (fkRegle != null ? fkRegle.hashCode() : 0);
+        return result;
+    }
+}

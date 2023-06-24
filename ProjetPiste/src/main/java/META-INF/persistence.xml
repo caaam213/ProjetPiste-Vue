@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="persistenceUnit">
+        <class>com.epul.permispiste.domains.ActionEntity</class>
+        <class>com.epul.permispiste.domains.ActionJeuEntity</class>
+        <class>com.epul.permispiste.domains.ActionMissionEntity</class>
+        <class>com.epul.permispiste.domains.ActionObjectifEntity</class>
+        <class>com.epul.permispiste.domains.ActionRegleEntity</class>
+        <class>com.epul.permispiste.domains.IndicatorEntity</class>
+        <class>com.epul.permispiste.domains.InscriptionEntity</class>
+        <class>com.epul.permispiste.domains.InscriptionActionEntity</class>
+        <class>com.epul.permispiste.domains.JeuEntity</class>
+        <class>com.epul.permispiste.domains.MissionEntity</class>
+        <class>com.epul.permispiste.domains.MissionObjectifEntity</class>
+        <class>com.epul.permispiste.domains.ObjectifEntity</class>
+        <class>com.epul.permispiste.domains.RegleEntity</class>
+        <class>com.epul.permispiste.domains.UtilisateurEntity</class>
+        <class>com.epul.permispiste.domains.ActionApprenantEntity</class>
+        <class>com.epul.permispiste.domains.UtilisateurJeuEntity</class>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/projetpermis1"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.username" value="userepul"/>
+            <property name="hibernate.connection.password" value="epul"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="persistenceUnit2"/>
+</persistence>

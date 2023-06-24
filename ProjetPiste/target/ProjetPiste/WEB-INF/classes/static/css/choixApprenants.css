@@ -1,0 +1,24 @@
+body {background-color: #EDE9E3;}
+
+h1{color: #D4B2A9;}
+
+.hover-effect
+{
+    background-color : #D4B2A9 !important;
+}
+
+.span
+{
+    color : #A38F85 !important;
+
+}
+
+.primary
+{
+    color : #000000 !important;
+}
+
+.hover-effect:hover {
+    background-color: #E7D7C9 !important;
+    cursor: pointer; /* Change le curseur de la souris */
+}

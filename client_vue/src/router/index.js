@@ -4,6 +4,7 @@ import Action from '../views/action/AfficherActions.vue'
 import AjouterActionForm from "@/views/action/AjouterAction.vue";
 import AjouterAction from "@/views/action/AjouterAction.vue";
 import ChoixApprenant from "@/views/jeu/choixApprenant.vue";
+import Missions from "@/views/mission/AfficherMissions.vue";
 
 const routes = [
 
@@ -26,7 +27,12 @@ const routes = [
         path: "/jeu/choixApprenant",
         name: "ChoixApprenant",
         component: ChoixApprenant
-    }
+    },
+    // {
+    //     path: '/mission/getAll/',
+    //     name: 'Mission',
+    //     component: Missions
+    // },
 ];
 
 const router = createRouter({

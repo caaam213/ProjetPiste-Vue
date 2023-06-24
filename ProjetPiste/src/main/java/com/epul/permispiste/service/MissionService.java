@@ -1,17 +1,22 @@
 package com.epul.permispiste.service;
 
+import com.epul.permispiste.domains.ActionEntity;
 import com.epul.permispiste.domains.MissionEntity;
+import com.epul.permispiste.dto.ActionDTO;
+import com.epul.permispiste.dto.MissionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.epul.permispiste.repositories.MissionRepository;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 public class MissionService {
 
+    @Autowired
     private MissionRepository missionRepository;
 
     @Autowired
@@ -27,6 +32,25 @@ public class MissionService {
             System.out.println(e);
         }
         return missions;
+    }
+
+    //TODO : setActionMission différent de null , régler le soucis de boucle infini
+    public List<MissionDTO> getAllMissions() {
+        List<MissionDTO> missionsDTO = new ArrayList<>();
+        try {
+            List<MissionEntity> missions = missionRepository.findAll();
+            for (MissionEntity mission : missions) {
+                MissionDTO missionDTO = new MissionDTO();
+                missionDTO.setId(mission.getId());
+                missionDTO.setWording(mission.getWording());
+                missionDTO.setActionMissions(null);
+                missionDTO.setInscriptions(null);
+                missionsDTO.add(missionDTO);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return missionsDTO;
     }
 
     public void editMission(MissionEntity missionEntity) {

@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <div class="container">
         <h1 class="my-4">Affichage des missions</h1>
         <div class="">
@@ -23,14 +22,6 @@
                     <router-link class="btn btn-secondary" :to="'/mission/edit/' + mission.id">Modifier</router-link>
                 </td>
                 <td><a v-on:click="deleteMission(mission.id)"  class="btn btn-danger" role="button" href="/mission/getAll">Supprimer</a></td>
-=======
-  <div class = container>
-    <h1 class="my-4 text-center">Affichage des missions</h1>
-<!--    <div class="d-flex justify-content-between mb-3">-->
-<!--      <p class="my-auto">Ajouter une mission</p>-->
-<!--      <router-link class="btn btn-primary" to="/mission/addForm">Ajouter</router-link>-->
-<!--    </div>-->
->>>>>>> 32d20c6001e255ea72cdc6dcdb1db5a71aaf341f
 
             </tr>
             </tbody>

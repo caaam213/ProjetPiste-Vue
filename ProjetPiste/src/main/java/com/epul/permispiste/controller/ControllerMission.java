@@ -164,36 +164,8 @@ public class ControllerMission {
 //    }
 
 
-    
-    @RequestMapping(method = RequestMethod.POST, value ="/edit")
-    public ModelAndView edit(HttpServletRequest request, HttpServletResponse response ) {
-        String destinationPage;
-        try {
-            session = request.getSession();
-            if (session.getAttribute("id") == null) {
-                String message = "Vous n'êtes pas connecté !!";
-                request.setAttribute("message", message);
-                destinationPage = "vues/connection/login";
-            }
-            else
-            {
-                int id = Integer.parseInt(request.getParameter("id"));
-                String libelle = request.getParameter("libelle");
-                MissionEntity missionEntity = new MissionEntity();
-                missionEntity.setId(id);
-                missionEntity.setWording(libelle);
-                missionService.editMission(missionEntity);
-                request.setAttribute("missions", missionService.getAll());
-                destinationPage = "/vues/mission/afficherMissions";
-            }
-        } catch (Exception e) {
-            request.setAttribute("MesErreurs", e.getMessage());
-            destinationPage = "/vues/Erreur";
-        }
 
-        // Redirection vers la page jsp appropriee
-        return new ModelAndView(destinationPage);
-    }
+
 
     //TODO : Adapter ces fonctions en API
     @GetMapping(value ="/delete")

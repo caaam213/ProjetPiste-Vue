@@ -3,10 +3,7 @@
         <h1 class="text-center">Liste des apprenants</h1>
         <div class="mt-5"></div>
         <div v-for="apprenant in listeApprenants" :key="apprenant.idUtilisateur">
-            <div v-if="controllerType === 'jeu'" class="shadow p-3 mb-5 bg-body-tertiary rounded text-center hover-effect fs-5 w-75 mx-auto" @click="redirectToJeu(apprenant.idUtilisateur)">
-                <span class="text-secondary">{{ apprenant.surname }} {{ apprenant.forename }}</span>
-            </div>
-            <div v-if="controllerType === 'voirJeu'" class="shadow p-3 mb-5 bg-body-tertiary rounded text-center hover-effect fs-5 w-75 mx-auto" @click="redirectToJeuxRealise(apprenant.idUtilisateur)">
+            <div class="shadow p-3 mb-5 bg-body-tertiary rounded text-center hover-effect fs-5 w-75 mx-auto" @click="redirectToMissionNonApp(apprenant.idUtilisateur)">
                 <span class="text-secondary">{{ apprenant.surname }} {{ apprenant.forename }}</span>
             </div>
         </div>
@@ -28,6 +25,7 @@ export default {
     mounted() {
         this.getControllerType();
         this.getListeApprenants();
+
     },
     methods: {
         async getListeApprenants() {
@@ -48,16 +46,10 @@ export default {
             this.controllerType = params.get('controllerType');
 
         },
-        redirectToJeu(apprenantId) {
-            router.push(`/jeu/listeJeuxPossiblesApprenant?idApprenant=${apprenantId}`);
-        },
-        redirectToJeuxRealise(apprenantId) {
+        redirectToMissionNonApp(apprenantId) {
             router.push(`/mission/listeMissionApp?idApprenant=${apprenantId}`)
         }
     }
 };
 </script>
 
-<style>
-@import 'Jeu.css';
-</style>

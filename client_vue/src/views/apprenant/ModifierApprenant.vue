@@ -10,7 +10,7 @@
                 <label for="prenom">Prenom</label>
                 <input type="text" class="form-control" id="prenom" v-model="utilisateurData.forename">
             </div>
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <div class="mx-auto text-center"><button type="submit" class="btn btn-primary mt-2 w-25">Enregistrer</button></div>
         </form>
         <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
         <p class="success-message" v-if="successMessage">{{ successMessage }}</p>

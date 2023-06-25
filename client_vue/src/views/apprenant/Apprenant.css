@@ -1,0 +1,11 @@
+.btn-primary
+{
+    background-color: #CDC6C3 !important;
+    border-color: #CDC6C3 !important;
+
+}
+
+.btn-primary:hover
+{
+    background-color : dimgray !important;
+}

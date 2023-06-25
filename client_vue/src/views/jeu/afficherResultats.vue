@@ -16,7 +16,7 @@
                 </div>
             </div>
             <form action="/">
-                <button type="submit">Revenir à la page d'accueil</button>
+                <button class="btn btn-primary" type="submit">Revenir à la page d'accueil</button>
             </form>
         </div>
     </div>

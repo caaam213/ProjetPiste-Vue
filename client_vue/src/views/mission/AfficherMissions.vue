@@ -1,6 +1,6 @@
 <template>
   <div class = container>
-    <h1 class="my-4">Affichage des missions</h1>
+    <h1 class="my-4 text-center">Affichage des missions</h1>
 <!--    <div class="d-flex justify-content-between mb-3">-->
 <!--      <p class="my-auto">Ajouter une mission</p>-->
 <!--      <router-link class="btn btn-primary" to="/mission/addForm">Ajouter</router-link>-->

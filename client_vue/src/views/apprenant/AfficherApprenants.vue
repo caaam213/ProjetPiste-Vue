@@ -1,10 +1,13 @@
 <template>
     <div class="container">
-        <h1>Affichage des apprenants</h1>
-        <div class="">
-            <p>Ajouter un apprenant</p>
-            <router-link class="btn btn-primary" to="/apprenant/add">Ajouter</router-link>
+        <h1 class="text-center">Affichage des apprenants</h1>
+        <div class="mx-auto text-center mt-2">
+            <div>
+                <img width="50" height="50" src="https://img.icons8.com/bubbles/50/user.png" alt="user" />
+                <router-link class="btn btn-primary w-25" to="/apprenant/add">Ajouter</router-link>
+            </div>
         </div>
+
 
         <table class="table table-striped">
             <thead>
@@ -71,5 +74,5 @@ export default {
 </script>
 
 <style>
-/* Ajoutez votre style CSS personnalisé ici */
+@import 'Apprenant.css';
 </style>

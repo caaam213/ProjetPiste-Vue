@@ -43,7 +43,7 @@
                         <input type="text" name="nomPartie" id="nomPartie" required v-model="nomPartie" />
 
                         <!-- Le reste du formulaire -->
-                        <button type="submit" :disabled="!submitButtonEnabled">Jouer !</button>
+                        <button type="submit" class="btn btn-secondary"  :disabled="!submitButtonEnabled">Jouer !</button>
                     </form>
                 </div>
             </div>

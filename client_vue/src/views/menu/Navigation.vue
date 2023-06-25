@@ -33,7 +33,7 @@
                     </a>
                     <ul class="dropdown-menu">
                       <!-- Je sais pas lequel supprimer -->
-                      <li><router-link to="/mission/getAll" class="nav-link">Gérer les mission</router-link></li>
+                      <li><router-link to="/mission/getAll" class="nav-link">Gérer les missions</router-link></li>
                         <li><a class="dropdown-item" href="/mission/choixApprenant">Affecter une mission</a></li>
                     </ul>
                 </li>

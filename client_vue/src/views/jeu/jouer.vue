@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <div class="col-md-8 col-sm-8">
-            <div class="blanc">
+        <div class="blanc mx-auto text-center d-flex align-items-center justify-content-center">
+            <div class="blanc mx-auto text-center">
                 <h2>Jeu lancé</h2>
                 <form @submit.prevent="validerJeu">
                     <input type="hidden" name="idApprenant" :value="idApprenant" />
@@ -10,7 +10,7 @@
                         <h2>{{ actionIndicateurDTO.action.wording }}</h2>
                         <div v-for="indicateur in actionIndicateurDTO.indicators" :key="indicateur.id" class="checkbox-wrapper">
                             <label :for="'choix' + indicateur.id">{{ indicateur.wording }}</label>
-                            <input type="checkbox" :id="'choix' + indicateur.id" name="checkboxesChecked" :value="indicateur.id" class="checkboxJeu" />
+                            <input type="checkbox" :id="'choix' + indicateur.id" name="checkboxesChecked" :value="indicateur.id" class="checkboxJeu ml-2" />
                         </div>
                     </div>
 
@@ -21,12 +21,13 @@
                         <input type="checkbox" id="choix-1" name="checkboxesChecked" value="-1" v-model="isAnyChecked" />
                     </div>
 
-                    <button type="submit">Valider le questionnaire</button>
+                    <button type="submit" class="btn btn-secondary">Valider le questionnaire</button>
                 </form>
             </div>
         </div>
     </div>
 </template>
+
 
 <script>
 import axios from 'axios';

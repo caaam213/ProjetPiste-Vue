@@ -15,7 +15,8 @@ import AjouterApprenant from "@/views/apprenant/AjouterApprenant.vue";
 import ModifierApprenant from "@/views/apprenant/ModifierApprenant.vue";
 import Accueil from "@/views/Accueil.vue";
 import ModifierAction from "@/views/action/ModifierAction.vue";
-
+import AfficherMissionNonApp from "@/views/mission/ListeMissionsNonAffectes.vue"
+import ChoixApprenantMissions from "@/views/mission/choixApprenant.vue"
 
 
 const routes = [
@@ -91,6 +92,16 @@ const routes = [
         path: '/apprenant/edit/:id',
         name: 'MoifierApprenant',
         component: ModifierApprenant,
+    },
+    {
+        path: '/mission/listeMissionApp',
+        name:"AfficherMissionNonApp",
+        component: AfficherMissionNonApp
+    },
+    {
+        path : '/mission/choixApprenant',
+        name: 'ChoixApprenantMissions',
+        component: ChoixApprenantMissions
     }
 ];
 

@@ -10,8 +10,8 @@
                         <h2>Pour commencer, vous pouvez vous :</h2>
                         <ul>
                             <li>1) <router-link to="/apprenant/add">Enregistrer en tant qu'apprenant</router-link></li>
-                            <li>2) <router-link to="/jeu/list">Inscrire à un jeu depuis la liste</router-link></li>
-                            <li>3) <router-link to="/mission/list">Accéder à la liste des missions pour valider des actions</router-link></li>
+                            <li>2) <router-link to="/mission/choixApprenant">Affecter une mission depuis la liste</router-link></li>
+                            <li>3) <router-link to="/jeu/choixApprenant?controllerType=jeu">Jouer à un jeu</router-link></li>
                         </ul>
                         <h3>D'autres informations comme la liste des apprenants ou des actions sont disponibles en haut à droite.</h3>
                     </div>

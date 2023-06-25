@@ -43,8 +43,6 @@ public class MissionService {
                 MissionDTO missionDTO = new MissionDTO();
                 missionDTO.setId(mission.getId());
                 missionDTO.setWording(mission.getWording());
-                missionDTO.setActionMissions(null);
-                missionDTO.setInscriptions(null);
                 missionsDTO.add(missionDTO);
             }
         } catch (Exception e) {
@@ -74,6 +72,18 @@ public class MissionService {
         missionRepository.delete(mission);
     }
 
-    public List<MissionEntity> findAll() { return missionRepository.findAll();}
+    public List<MissionDTO> findAll() {
+        List<MissionEntity> missionsList =  missionRepository.findAll();
+        List<MissionDTO> missionDTOS = new ArrayList<>();
+        for (MissionEntity missionEntity : missionsList)
+        {
+            MissionDTO missionDTO = new MissionDTO();
+            missionDTO.setId(missionEntity.getId());
+            missionDTO.setWording(missionEntity.getWording());
+            missionDTOS.add(missionDTO);
+        }
+        return missionDTOS;
+
+    }
     public MissionEntity findMissionById(int id) {return missionRepository.findById(id); }
 }

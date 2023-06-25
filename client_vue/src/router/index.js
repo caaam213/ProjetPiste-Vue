@@ -10,6 +10,11 @@ import Jouer from "@/views/jeu/Jouer.vue";
 import Missions from "@/views/mission/AfficherMissions.vue";
 import AfficherResultats from "@/views/jeu/afficherResultats.vue";
 
+import AfficherApprenants from "@/views/apprenant/AfficherApprenants.vue";
+import AjouterApprenant from "@/views/apprenant/AjouterApprenant.vue";
+import ModifierApprenant from "@/views/apprenant/ModifierApprenant.vue";
+
+
 
 const routes = [
 
@@ -50,11 +55,27 @@ const routes = [
         props: (route) => ({ idJeu: route.query.idJeu, idApprenant: route.query.idApprenant })
     },
     {
+
         path:'/jeu/afficherResultats',
         name: 'AfficherResultats',
         component: AfficherResultats
-    }
+    },
+    {
 
+        path: '/apprenant/getAll/',
+        name: 'Apprenant',
+        component: AfficherApprenants,
+    },
+    {
+        path: '/apprenant/add/',
+        name: 'AjouterApprenant',
+        component: AjouterApprenant,
+    },
+    {
+        path: '/apprenant/edit/:id',
+        name: 'MoifierApprenant',
+        component: ModifierApprenant,
+    },
     // {
     //     path: '/mission/getAll/',
     //     name: 'Mission',

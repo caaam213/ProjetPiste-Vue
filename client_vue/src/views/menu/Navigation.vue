@@ -21,8 +21,24 @@
                 <li class="nav-item">
                     <router-link to="/utilisateur/indexApprenant" class="nav-link">Apprenants</router-link>
                 </li>
+                <li class="nav-item dropdown">
+                    <a
+                        class="nav-link dropdown-toggle"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        Missions
+                    </a>
+                    <ul class="dropdown-menu">
+                      <!-- Je sais pas lequel supprimer -->
+                      <li><router-link to="/mission/getAll" class="nav-link">Gérer les mission</router-link></li>
+                        <li><a class="dropdown-item" href="/mission/choixApprenant">Affecter une mission</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item">
-                  <router-link to="/mission/getAll" class="nav-link">Missions</router-link>
+
                 </li>
                 <li class="nav-item">
                     <router-link to="/action/getAll" class="nav-link">Actions</router-link>

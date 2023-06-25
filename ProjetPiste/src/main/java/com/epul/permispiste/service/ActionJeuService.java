@@ -2,6 +2,7 @@ package com.epul.permispiste.service;
 
 import com.epul.permispiste.domains.ActionEntity;
 import com.epul.permispiste.domains.ActionJeuEntity;
+import com.epul.permispiste.dto.ActionDTO;
 import com.epul.permispiste.repositories.ActionJeuRepository;
 import com.epul.permispiste.repositories.ActionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,18 @@ public class ActionJeuService {
         this.actionRepository = actionRepository;
     }
 
-    public List<ActionEntity> getActionsByJeu(int id) {
+    public List<ActionDTO> getActionsByJeu(int id) {
+        List<ActionDTO> listActionDTO = new ArrayList<>();
         List<ActionJeuEntity> actionJeuEntities = actionJeuRepository.findActionJeuEntitiesByFkJeu(id);
-        List<ActionEntity> actionEntities = new ArrayList<>();
+//        List<ActionEntity> actionEntities = new ArrayList<>();
         for (ActionJeuEntity actionJeuEntity : actionJeuEntities) {
             ActionEntity actionEntity = actionRepository.findActionEntityById(actionJeuEntity.getFkAction());
-            actionEntities.add(actionEntity);
+            ActionDTO actionDTO = new ActionDTO();
+            actionDTO.setIdAction(actionEntity.getId());
+            actionDTO.setWording(actionEntity.getWording());
+            actionDTO.setScoreMin(actionEntity.getScoreMinimum());
+            listActionDTO.add(actionDTO);
         }
-        return actionEntities;
+        return listActionDTO;
     }
 }

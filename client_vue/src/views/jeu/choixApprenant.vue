@@ -16,6 +16,7 @@
 <script>
 import axios from 'axios';
 import { API_PATH } from "../../config/config";
+import router from "../../router"
 
 export default {
     data() {
@@ -40,6 +41,7 @@ export default {
                 console.error(error);
             }
         },
+
         getControllerType() {
             const params = new URLSearchParams(window.location.search);
             console.log(params.get('controllerType'));
@@ -47,8 +49,7 @@ export default {
 
         },
         redirectToJeu(apprenantId) {
-            // Rediriger vers la page correspondante pour le jeu avec l'apprenant sélectionné
-            // en utilisant l'apprenantId
+            router.push(`/jeu/listeJeuxPossiblesApprenant?idApprenant=${apprenantId}`);
         },
         redirectToJeuxRealise(apprenantId) {
             // Rediriger vers la page correspondante pour les jeux réalisés par l'apprenant sélectionné

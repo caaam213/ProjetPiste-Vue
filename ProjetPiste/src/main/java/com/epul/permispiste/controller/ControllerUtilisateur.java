@@ -1,28 +1,45 @@
-//package com.epul.permispiste.controller;
-//
-//import com.epul.permispiste.domains.ApprenantEntity;
-//import com.epul.permispiste.domains.UtilisateurEntity;
-//import com.epul.permispiste.service.UtilisateurService;
-//import com.epul.permispiste.utilitaires.MonMotPassHash;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.servlet.ModelAndView;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import javax.servlet.http.HttpSession;
-//import java.util.Arrays;
-//import java.util.List;
-//
-//@RequestMapping("/utilisateur")
-//@RestController
-//@CrossOrigin
-//public class ControllerUtilisateur {
-//
-//    @Autowired
-//    private UtilisateurService utilisateurService;
-//
-//    private HttpSession session;
+package com.epul.permispiste.controller;
+
+import com.epul.permispiste.domains.ApprenantEntity;
+import com.epul.permispiste.domains.UtilisateurEntity;
+import com.epul.permispiste.dto.UtilisateurDTO;
+import com.epul.permispiste.service.UtilisateurService;
+import com.epul.permispiste.utilitaires.MonMotPassHash;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.List;
+
+@RequestMapping("/utilisateur")
+@RestController
+@CrossOrigin
+public class ControllerUtilisateur {
+
+    @Autowired
+    private UtilisateurService utilisateurService;
+
+    private HttpSession session;
+
+    @GetMapping("/getUtilisateur")
+    public UtilisateurDTO getUtilisateur(@RequestParam("id") int id) {
+        UtilisateurEntity utilisateur = null;
+        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        try {
+            utilisateur = utilisateurService.getUtilisateurById(id);
+            utilisateurDTO.setIdUtilisateur(utilisateur.getNumUtil());
+            utilisateurDTO.setEmail(utilisateur.getEmail());
+            utilisateurDTO.setForename(utilisateur.getForename());
+            utilisateurDTO.setSurname(utilisateur.getSurname());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return utilisateurDTO;
+    }
 //
 //    @RequestMapping(value = "/indexApprenant")
 //    public ModelAndView indexApprenant(HttpServletRequest request) throws Exception {
@@ -247,4 +264,4 @@
 //        // Redirection vers la page jsp appropriee
 //        return new ModelAndView(destinationPage);
 //    }
-//}
+}

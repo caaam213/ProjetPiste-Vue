@@ -1,10 +1,8 @@
 package com.epul.permispiste.controller;
 
+import com.epul.permispiste.classesjson.JeuCreationRequest;
 import com.epul.permispiste.domains.*;
-import com.epul.permispiste.dto.ActionEntityWDernierScore;
-import com.epul.permispiste.dto.ActionWEntityWDernierScoreComparator;
-import com.epul.permispiste.dto.IndicatorsActions;
-import com.epul.permispiste.dto.UtilisateurDTO;
+import com.epul.permispiste.dto.*;
 import com.epul.permispiste.mesExceptions.MonException;
 import com.epul.permispiste.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,207 +64,169 @@ public class ControllerJeu {
         }
     }
 
+    public List<ActionEntity> verifierDependances(ActionEntity action, InscriptionActionEntity inscription)
+    {
+        ArrayList<ActionEntity> actionsAAjouter = new ArrayList<>();
+        while (action.getFkAction() != null)
+        {
+            ActionEntity actionMere = actionWRepoService.getActionById(action.getFkAction());
 
-//
-//
-//
-//
-//    public List<ActionEntity> verifierDependances(ActionEntity action, InscriptionActionEntity inscription)
-//    {
-//        ArrayList<ActionEntity> actionsAAjouter = new ArrayList<>();
-//        while (action.getFkAction() != null)
-//        {
-//            ActionEntity actionMere = actionWRepoService.getActionById(action.getFkAction());
-//
-//            InscriptionActionEntity inscriptionActionMere = inscriptionActionService.getInscriptionActionByIdAction(actionMere.getId(), inscription.getFkInscription());
-//
-//            if (actionMere.getScoreMinimum() > inscriptionActionMere.getScore())
-//            {
-//                actionsAAjouter = new ArrayList<>();
-//                break;
-//            }
-//            else
-//            {
-//                actionsAAjouter.add(action);
-//                action = actionMere;
-//            }
-//        }
-//        return actionsAAjouter;
-//    }
-//    @RequestMapping(value = "listeJeuxPossiblesApprenant.htm")
-//    public ModelAndView getJeuxPossiblesPourUnApp(HttpServletRequest request, HttpServletResponse response) throws Exception
-//    {
-//        String destinationPage = "";
-//        int idApprenant = Integer.parseInt(request.getParameter("idApprenant"));
-//
-//        // Récupération des informations sur l'utilisateur
-//        UtilisateurEntity utilisateur = utilisateurService.getUtilisateurById(idApprenant);
-//        request.setAttribute("utilisateur", utilisateur);
-//
-//        List<InscriptionActionEntity> listeInscriptionActions = null;
-//        List<InscriptionEntity> listeInscriptionsPourUtilisateur = null;
-//        List<ActionEntity> listeActionsPossibles = new ArrayList<>();
-//        List<ActionEntityWDernierScore> listeActionsWDernierScore = new ArrayList<>();
-//
-//        try {
-//            // On récupère toutes les inscriptions de l'apprenant
-//            listeInscriptionsPourUtilisateur = inscriptionService.getInscriptionsByIdUsers(idApprenant);
-//            for (InscriptionEntity inscription : listeInscriptionsPourUtilisateur) {
-//                // On récupère toutes les actions de l'inscription
-//                listeInscriptionActions = inscriptionActionService.getInscriptionActionsById(inscription.getId());
-//
-//                // On récupère toutes les actions possibles
-//                for (InscriptionActionEntity inscriptionAction : listeInscriptionActions) {
-//                    ActionEntity action = actionWRepoService.getActionById(inscriptionAction.getFkAction());
-//                    if (action.getFkAction() == null) {
-//                        // Dans le cas où l'action n'a pas de dépendance
-//                        if (!listeActionsPossibles.contains(action)) {
-//                            ActionEntityWDernierScore actionWDernierScore = new ActionEntityWDernierScore(
-//                                    action.getId(),
-//                                    action.getWording(),
-//                                    "",
-//                                    action.getScoreMinimum(),
-//                                    inscriptionAction.getFkInscription(),
-//                                    inscriptionAction.getScore(),
-//                                    true
-//                            );
-//                            listeActionsWDernierScore.add(actionWDernierScore);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        // Dans le cas où l'action a des dépendances
-//                        List<ActionEntity> actionsAAjouter = verifierDependances(action,inscriptionAction);
-//
-//                        if(actionsAAjouter.size() == 0)
-//                        {
-//                            ActionEntityWDernierScore actionWDernierScore = new ActionEntityWDernierScore(
-//                                    action.getId(),
-//                                    action.getWording(),
-//                                    actionWRepoService.getActionById(action.getFkAction()).getWording(),
-//                                    action.getScoreMinimum(),
-//                                    inscriptionAction.getFkInscription(),
-//                                    inscriptionAction.getScore(),
-//                                    false
-//                            );
-//                            listeActionsWDernierScore.add(actionWDernierScore);
-//                        }
-//                        else
-//                        {
-//                            for (ActionEntity actionAAjouter : actionsAAjouter)
-//                            {
-//                                ActionEntityWDernierScore actionWDernierScore = new ActionEntityWDernierScore(
-//                                        actionAAjouter.getId(),
-//                                        actionAAjouter.getWording(),
-//                                        "",
-//                                        actionAAjouter.getScoreMinimum(),
-//                                        inscriptionAction.getFkInscription(),
-//                                        inscriptionAction.getScore(),
-//                                        true
-//                                );
-//                                listeActionsWDernierScore.add(actionWDernierScore);
-//
-//                            }
-//                        }
-//
-//                    }
-//                }
-//
-//            }
-//            Collections.sort(listeActionsWDernierScore, new ActionWEntityWDernierScoreComparator());
-//            request.setAttribute("listeActions", listeActionsWDernierScore);;
-//            request.setAttribute("idApprenant", idApprenant);
-//            destinationPage = "vues/jeu/listeJeuxPossiblesApprenant";
-//        } catch (MonException e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "/vues/Erreur";
-//        } catch (Exception e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "vues/Erreur";
-//        }
-//        return new ModelAndView(destinationPage);
-//    }
-//
-//    @RequestMapping(value = "/creerJeu")
-//    public void creerJeu(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//        try {
-//            String nomJeu = request.getParameter("nomPartie");
-//            String[] options = request.getParameterValues("actionsCheckbox");
-//            ArrayList<Integer> listeIdActions = new ArrayList<>();
-//
-//            for (String option : options) {
-//                listeIdActions.add(Integer.parseInt(option));
-//            }
-//
-//            JeuEntity jeu = jeuService.addActionsEtJeu(nomJeu, listeIdActions, Integer.parseInt(request.getParameter("idApprenant")));
-//
-//            String redirectUrl = "/jeu/jouer.htm?idApprenant=" + request.getParameter("idApprenant") + "&idJeu=" + jeu.getId();
-//            response.sendRedirect(redirectUrl);
-//
-//        } catch (MonException e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            String destinationPage = "/vues/Erreur";
-//            RequestDispatcher dispatcher = request.getRequestDispatcher(destinationPage);
-//            dispatcher.forward(request, response);
-//        } catch (Exception e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            String destinationPage = "vues/Erreur";
-//            RequestDispatcher dispatcher = request.getRequestDispatcher(destinationPage);
-//            dispatcher.forward(request, response);
-//        }
-//    }
-//
-//
-//    @RequestMapping(value = "jouer.htm")
-//    public ModelAndView jouer(HttpServletRequest request, HttpServletResponse response) throws Exception
-//    {
-//        String destinationPage = "";
-//        try {
-//            String idJeuParam = request.getParameter("idJeu");
-//            int idJeu = Integer.parseInt(idJeuParam);
-//            System.out.println("Affichage idJeu : "+idJeu);
-//            List<ActionEntity> listeActions = actionJeuService.getActionsByJeu(idJeu);
-//            List<IndicatorsActions> listeIndicateursActions = new ArrayList<>();
-//
-//            for (ActionEntity action : listeActions)
-//            {
-//                //Récupérer les indicateurs de l'action
-//                // TODO : Créer DTO ActionIndicateurEntity
-//                List<IndicatorEntity> listeIndicateurs = indicateurService.findAllByFkAction(action.getId());
-//                IndicatorsActions indicatorsActions = new IndicatorsActions(action, listeIndicateurs);
-//                listeIndicateursActions.add(indicatorsActions);
-//            }
-//            request.setAttribute("listeIndicateursActions", listeIndicateursActions);
-//            request.setAttribute("idJeu", idJeu);
-//            request.setAttribute("idApprenant", request.getParameter("idApprenant"));
-//            destinationPage = "vues/jeu/jouer";
-//
-//        }
-//        catch (MonException e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "/vues/Erreur";
-//        } catch (Exception e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "vues/Erreur";
-//        }
-//        return new ModelAndView(destinationPage);
-//    }
-//
-//    public ActionEntity verifyIfActionIsInList(LinkedHashMap listeActions, int idAction)
-//    {
-//        ActionEntity action = null;
-//        Iterator it = listeActions.entrySet().iterator();
-//        while (it.hasNext()) {
-//            Map.Entry pair = (Map.Entry)it.next();
-//            ActionEntity actionEntity = (ActionEntity) pair.getKey();
-//            if(actionEntity.getId() == idAction)
-//            {
-//                action = actionEntity;
-//            }
-//        }
-//        return action;
-//    }
-//
+            InscriptionActionEntity inscriptionActionMere = inscriptionActionService.getInscriptionActionByIdAction(actionMere.getId(), inscription.getFkInscription());
+
+            if (actionMere.getScoreMinimum() > inscriptionActionMere.getScore())
+            {
+                actionsAAjouter = new ArrayList<>();
+                break;
+            }
+            else
+            {
+                actionsAAjouter.add(action);
+                action = actionMere;
+            }
+        }
+        return actionsAAjouter;
+    }
+
+    @GetMapping("/listeJeuxPossiblesApprenant")
+    public ResponseEntity<List<ActionEntityWDernierScore>> getJeuxPossiblesPourUnApp(@RequestParam("idApprenant") int idApprenant) {
+        List<ActionEntityWDernierScore> listeActionsWDernierScore = new ArrayList<>();
+
+        try {
+            // Récupération des informations sur l'utilisateur
+            UtilisateurEntity utilisateur = utilisateurService.getUtilisateurById(idApprenant);
+
+            List<InscriptionActionEntity> listeInscriptionActions;
+            List<InscriptionEntity> listeInscriptionsPourUtilisateur;
+            List<ActionEntity> listeActionsPossibles = new ArrayList<>();
+
+            // On récupère toutes les inscriptions de l'apprenant
+            listeInscriptionsPourUtilisateur = inscriptionService.getInscriptionsByIdUsers(idApprenant);
+            for (InscriptionEntity inscription : listeInscriptionsPourUtilisateur) {
+                // On récupère toutes les actions de l'inscription
+                listeInscriptionActions = inscriptionActionService.getInscriptionActionsById(inscription.getId());
+
+                // On récupère toutes les actions possibles
+                for (InscriptionActionEntity inscriptionAction : listeInscriptionActions) {
+                    ActionEntity action = actionWRepoService.getActionById(inscriptionAction.getFkAction());
+                    if (action.getFkAction() == null) {
+                        // Dans le cas où l'action n'a pas de dépendance
+                        if (!listeActionsPossibles.contains(action)) {
+                            ActionEntityWDernierScore actionWDernierScore = new ActionEntityWDernierScore(
+                                    action.getId(),
+                                    action.getWording(),
+                                    "",
+                                    action.getScoreMinimum(),
+                                    inscriptionAction.getFkInscription(),
+                                    inscriptionAction.getScore(),
+                                    true
+                            );
+                            listeActionsWDernierScore.add(actionWDernierScore);
+                        }
+                    } else {
+                        // Dans le cas où l'action a des dépendances
+                        List<ActionEntity> actionsAAjouter = verifierDependances(action, inscriptionAction);
+
+                        if (actionsAAjouter.size() == 0) {
+                            ActionEntityWDernierScore actionWDernierScore = new ActionEntityWDernierScore(
+                                    action.getId(),
+                                    action.getWording(),
+                                    actionWRepoService.getActionById(action.getFkAction()).getWording(),
+                                    action.getScoreMinimum(),
+                                    inscriptionAction.getFkInscription(),
+                                    inscriptionAction.getScore(),
+                                    false
+                            );
+                            listeActionsWDernierScore.add(actionWDernierScore);
+                        } else {
+                            for (ActionEntity actionAAjouter : actionsAAjouter) {
+                                ActionEntityWDernierScore actionWDernierScore = new ActionEntityWDernierScore(
+                                        actionAAjouter.getId(),
+                                        actionAAjouter.getWording(),
+                                        "",
+                                        actionAAjouter.getScoreMinimum(),
+                                        inscriptionAction.getFkInscription(),
+                                        inscriptionAction.getScore(),
+                                        true
+                                );
+                                listeActionsWDernierScore.add(actionWDernierScore);
+                            }
+                        }
+                    }
+                }
+            }
+
+            Collections.sort(listeActionsWDernierScore, new ActionWEntityWDernierScoreComparator());
+
+            return ResponseEntity.ok(listeActionsWDernierScore);
+        } catch (MonException e) {
+            // Gérer les exceptions spécifiques
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            // Gérer les exceptions générales
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @PostMapping("/creerJeu")
+    public ResponseEntity<String> creerJeu(@RequestBody JeuCreationRequest jeuRequest) {
+        try {
+            ArrayList<Integer> listeIdActions = new ArrayList<>();
+            for (String option : jeuRequest.getActionsCheckbox()) {
+                listeIdActions.add(Integer.parseInt(option));
+            }
+
+            JeuEntity jeu = jeuService.addActionsEtJeu(jeuRequest.getLibelleJeu(),
+                    listeIdActions, jeuRequest.getIdApprenant());
+
+            String idJeu = String.valueOf(jeu.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(idJeu);
+        } catch (MonException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/jouer")
+    public ResponseEntity<List<IndicatorsActions>> jouer(@RequestParam("idJeu") int idJeu,
+                                                            @RequestParam("idApprenant") int idApprenant) {
+        try {
+            List<ActionDTO> listeActions = actionJeuService.getActionsByJeu(idJeu);
+            List<IndicatorsActions> listeIndicateursActions = new ArrayList<>();
+
+            for (ActionDTO action : listeActions) {
+                // Récupérer les indicateurs de l'action
+                List<IndicatorDTO> listeIndicateurs = indicateurService.findAllByFkAction(action.getIdAction());
+
+                IndicatorsActions indicatorsActions = new IndicatorsActions(action, listeIndicateurs);
+                listeIndicateursActions.add(indicatorsActions);
+            }
+
+            return ResponseEntity.ok().body(listeIndicateursActions);
+        } catch (MonException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    public ActionDTO verifyIfActionIsInList(LinkedHashMap listeActions, int idAction)
+    {
+        ActionDTO action = null;
+        Iterator it = listeActions.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            ActionDTO actionEntity = (ActionDTO) pair.getKey();
+            if(actionEntity.getIdAction() == idAction)
+            {
+                action = actionEntity;
+            }
+        }
+        return action;
+    }
+
 //    @RequestMapping(value = "/validerJeu")
 //    public ModelAndView validerJeu(HttpServletRequest request, HttpServletResponse response) throws Exception
 //    {

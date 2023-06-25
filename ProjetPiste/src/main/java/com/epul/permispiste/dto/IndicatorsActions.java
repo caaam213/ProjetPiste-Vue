@@ -7,27 +7,27 @@ import java.util.List;
 
 public class IndicatorsActions {
 
-    public ActionEntity action;
-    public List<IndicatorEntity> indicators;
+    public ActionDTO action;
+    public List<IndicatorDTO> indicators;
 
-    public IndicatorsActions(ActionEntity action, List<IndicatorEntity> indicators) {
+    public IndicatorsActions(ActionDTO action, List<IndicatorDTO> indicators) {
         this.action = action;
         this.indicators = indicators;
     }
 
-    public ActionEntity getAction() {
+    public ActionDTO getAction() {
         return action;
     }
 
-    public void setAction(ActionEntity action) {
+    public void setAction(ActionDTO action) {
         this.action = action;
     }
 
-    public List<IndicatorEntity> getIndicators() {
+    public List<IndicatorDTO> getIndicators() {
         return indicators;
     }
 
-    public void setIndicators(List<IndicatorEntity> indicators) {
+    public void setIndicators(List<IndicatorDTO> indicators) {
         this.indicators = indicators;
     }
 }

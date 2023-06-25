@@ -1,6 +1,6 @@
 <template>
         <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%;">
-        <a class="navbar-brand" href="#">Permis piste</a>
+        <a class="navbar-brand" href="#"> Permis piste</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <form class="d-flex input-group w-auto">
                 <input
@@ -32,9 +32,14 @@
                         Missions
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/mission/index">Gérer les missions</a></li>
+                        <!-- Je sais pas lequel supprimer -->
+                        <li><a class="dropdown-item" href="/mission/AfficherMission">Gérer les missions</a></li>
                         <li><a class="dropdown-item" href="/mission/choixApprenant">Affecter une mission</a></li>
                     </ul>
+                </li>
+                <!-- Je sais pas lequel supprimer -->
+                <li class="nav-item">
+                  <router-link to="/mission/getAll" class="nav-link">Missions</router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to="/action/getAll" class="nav-link">Actions</router-link>

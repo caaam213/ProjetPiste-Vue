@@ -7,6 +7,8 @@ import ChoixApprenant from "@/views/jeu/choixApprenant.vue";
 import listeJeuxPossiblesApprenant from "@/views/jeu/listerJeuxPossibles.vue";
 import UtilisateurComponent from "@/components/utilisateur/UtilisateurComponent.vue";
 import Jouer from "@/views/jeu/Jouer.vue";
+import Missions from "@/views/mission/AfficherMissions.vue";
+
 
 const routes = [
 
@@ -46,7 +48,11 @@ const routes = [
         component: Jouer,
         props: (route) => ({ idJeu: route.query.idJeu, idApprenant: route.query.idApprenant })
     }
-
+    // {
+    //     path: '/mission/getAll/',
+    //     name: 'Mission',
+    //     component: Missions
+    // },
 ];
 
 const router = createRouter({

@@ -227,6 +227,7 @@ public class ControllerJeu {
         return action;
     }
 
+    // TODO : A transformer en API
 //    @RequestMapping(value = "/validerJeu")
 //    public ModelAndView validerJeu(HttpServletRequest request, HttpServletResponse response) throws Exception
 //    {
@@ -246,22 +247,22 @@ public class ControllerJeu {
 //
 //            List<InscriptionEntity> listeInscriptions = inscriptionService.getInscriptionsByIdUsers(idApprenant);
 //
-//            List<ActionEntity> listeActions = actionJeuService.getActionsByJeu(idJeu);
+//            List<ActionDTO> listeActions = actionJeuService.getActionsByJeu(idJeu);
 //
-//            LinkedHashMap<ActionEntity, Integer> actionsAAfficherScore = new LinkedHashMap();
+//            LinkedHashMap<ActionDTO, Integer> actionsAAfficherScore = new LinkedHashMap();
 //
 //            // Pour chaque inscription, on calcule le score et on le met à jour
 //            for (InscriptionEntity inscription : listeInscriptions)
 //            {
-//                for (ActionEntity action : listeActions)
+//                for (ActionDTO action : listeActions)
 //                {
 //                    int score;
-//                    ActionEntity actionEntity = verifyIfActionIsInList(actionsAAfficherScore, action.getId());
+//                    ActionDTO actionEntity = verifyIfActionIsInList(actionsAAfficherScore, action.getIdAction());
 //                    if (actionEntity == null)
 //                    {
-//                        List<IndicatorEntity> listeIndicateurs = indicateurService.findAllByFkAction(action.getId());
+//                        List<IndicatorDTO> listeIndicateurs = indicateurService.findAllByFkAction(action.getIdAction());
 //                        score = 0;
-//                        for (IndicatorEntity indicateur : listeIndicateurs)
+//                        for (IndicatorDTO indicateur : listeIndicateurs)
 //                        {
 //                            if (idIndicateursSelected.contains(String.valueOf(indicateur.getId())))
 //                            {
@@ -282,7 +283,7 @@ public class ControllerJeu {
 //                    }
 //                    System.out.println("action : "+action.getWording());
 //                    System.out.println("score : "+score);
-//                    inscriptionActionService.updateScore(inscription.getId(), action.getId(), score);
+//                    inscriptionActionService.updateScore(inscription.getId(), action.getIdAction(), score);
 //                }
 //            }
 //            System.out.println("actionsAAfficherScore : "+actionsAAfficherScore);
@@ -305,8 +306,8 @@ public class ControllerJeu {
 //
 //
 //    }
-//
-//
+
+
 //    @RequestMapping(value = "listeJeuxRealise.htm")
 //    public ModelAndView getJeuxRealise(HttpServletRequest request, HttpServletResponse response) throws Exception
 //    {

@@ -74,31 +74,31 @@ public class ControllerAction {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         }
     }
-//
-//    @RequestMapping(method = RequestMethod.GET, value ="/editForm/{id}")
-//    public ModelAndView edit(HttpServletRequest request, @PathVariable(value = "id") int id ) {
-//        String destinationPage;
-//        try {
-//            session = request.getSession();
-//            if (session.getAttribute("id") == null) {
-//                String message = "Vous n'êtes pas connecté !!";
-//                request.setAttribute("message", message);
-//                destinationPage = "vues/connection/login";
-//            }
-//            else
-//            {
-//                ActionEntity action = actionService.getAction(id);
-//                request.setAttribute("action", action);
-//                destinationPage = "/vues/action/editAction";
-//            }
-//        } catch (Exception e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "/vues/Erreur";
-//        }
-//
-//        // Redirection vers la page jsp appropriee
-//        return new ModelAndView(destinationPage);
-//    }
+
+    @RequestMapping(method = RequestMethod.GET, value ="/editForm/{id}")
+    public ModelAndView edit(HttpServletRequest request, @PathVariable(value = "id") int id ) {
+        String destinationPage;
+        try {
+            session = request.getSession();
+            if (session.getAttribute("id") == null) {
+                String message = "Vous n'êtes pas connecté !!";
+                request.setAttribute("message", message);
+                destinationPage = "vues/connection/login";
+            }
+            else
+            {
+                ActionEntity action = actionService.getAction(id);
+                request.setAttribute("action", action);
+                destinationPage = "/vues/action/editAction";
+            }
+        } catch (Exception e) {
+            request.setAttribute("MesErreurs", e.getMessage());
+            destinationPage = "/vues/Erreur";
+        }
+
+        // Redirection vers la page jsp appropriee
+        return new ModelAndView(destinationPage);
+    }
 //
 //    @RequestMapping(method = RequestMethod.POST, value ="/edit")
 //    public ModelAndView edit(HttpServletRequest request, HttpServletResponse response ) {

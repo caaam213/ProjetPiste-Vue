@@ -227,85 +227,58 @@ public class ControllerJeu {
         return action;
     }
 
-    // TODO : A transformer en API
-//    @RequestMapping(value = "/validerJeu")
-//    public ModelAndView validerJeu(HttpServletRequest request, HttpServletResponse response) throws Exception
-//    {
-//        String destinationPage = "";
-//        try
-//        {
-//            // Récupération des indicateurs sélectionnés
-//            String[] options = request.getParameterValues("checkboxesChecked");
-//            List<String> idIndicateursSelected = new ArrayList<String>(Arrays.asList(options));
-//            if (idIndicateursSelected.get(0) == "-1")
-//            {
-//                idIndicateursSelected.remove(0);
-//            }
-//
-//            int idJeu = Integer.parseInt(request.getParameter("idJeu"));
-//            int idApprenant = Integer.parseInt(request.getParameter("idApprenant"));
-//
-//            List<InscriptionEntity> listeInscriptions = inscriptionService.getInscriptionsByIdUsers(idApprenant);
-//
-//            List<ActionDTO> listeActions = actionJeuService.getActionsByJeu(idJeu);
-//
-//            LinkedHashMap<ActionDTO, Integer> actionsAAfficherScore = new LinkedHashMap();
-//
-//            // Pour chaque inscription, on calcule le score et on le met à jour
-//            for (InscriptionEntity inscription : listeInscriptions)
-//            {
-//                for (ActionDTO action : listeActions)
-//                {
-//                    int score;
-//                    ActionDTO actionEntity = verifyIfActionIsInList(actionsAAfficherScore, action.getIdAction());
-//                    if (actionEntity == null)
-//                    {
-//                        List<IndicatorDTO> listeIndicateurs = indicateurService.findAllByFkAction(action.getIdAction());
-//                        score = 0;
-//                        for (IndicatorDTO indicateur : listeIndicateurs)
-//                        {
-//                            if (idIndicateursSelected.contains(String.valueOf(indicateur.getId())))
-//                            {
-//                                score += indicateur.getValueIfCheck();
-//                                System.out.println("J'ai trouvé l'indicateur : "+indicateur.getId()+" dans la liste des indicateurs cochés");
-//                            }
-//                            else
-//                            {
-//                                score += indicateur.getValueIfUnCheck();
-//                                System.out.println("L'id de l'indicateur : "+indicateur.getId()+" n'est pas dans la liste des indicateurs cochés");
-//                            }
-//                        }
-//                        actionsAAfficherScore.put(action, score);
-//                    }
-//                    else
-//                    {
-//                        score = actionsAAfficherScore.get(actionEntity);
-//                    }
-//                    System.out.println("action : "+action.getWording());
-//                    System.out.println("score : "+score);
-//                    inscriptionActionService.updateScore(inscription.getId(), action.getIdAction(), score);
-//                }
-//            }
-//            System.out.println("actionsAAfficherScore : "+actionsAAfficherScore);
-//            // Faire afficher le score
-//            request.setAttribute("actionsAAfficherScore", actionsAAfficherScore);
-//            System.out.println("Taille de la liste des actions : "+actionsAAfficherScore.size());
-//            request.setAttribute("idJeu", idJeu);
-//            request.setAttribute("idApprenant", idApprenant);
-//            destinationPage = "vues/jeu/afficherResultats";
-//        }
-//        catch (MonException e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "/vues/Erreur";
-//        } catch (Exception e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "vues/Erreur";
-//        }
-//        return new ModelAndView(destinationPage);
-//
-//
-//
-//    }
+    @PostMapping("/validerJeu")
+    public ResponseEntity<LinkedHashMap<ActionDTO, Integer>> validerJeu(@RequestBody JeuCreationRequest jeuRequest) {
+        try {
+            // Récupération des indicateurs sélectionnés
+            String[] options = jeuRequest.getIndicatorsCheckbox();
+            List<String> idIndicateursSelected = new ArrayList<>(Arrays.asList(options));
+            if (idIndicateursSelected.get(0).equals("-1")) {
+                idIndicateursSelected.remove(0);
+            }
+
+            int idJeu = jeuRequest.getIdJeu();
+            int idApprenant = jeuRequest.getIdApprenant();
+
+            List<InscriptionEntity> listeInscriptions = inscriptionService.getInscriptionsByIdUsers(idApprenant);
+            List<ActionDTO> listeActions = actionJeuService.getActionsByJeu(idJeu);
+            LinkedHashMap<ActionDTO, Integer> actionsAAfficherScore = new LinkedHashMap<>();
+
+            // Pour chaque inscription, on calcule le score et on le met à jour
+            for (InscriptionEntity inscription : listeInscriptions) {
+                for (ActionDTO action : listeActions) {
+                    int score;
+                    ActionDTO actionEntity = verifyIfActionIsInList(actionsAAfficherScore, action.getIdAction());
+                    if (actionEntity == null) {
+                        List<IndicatorDTO> listeIndicateurs = indicateurService.findAllByFkAction(action.getIdAction());
+                        score = 0;
+                        for (IndicatorDTO indicateur : listeIndicateurs) {
+                            if (idIndicateursSelected.contains(String.valueOf(indicateur.getId()))) {
+                                score += indicateur.getValueIfCheck();
+                                System.out.println("J'ai trouvé l'indicateur : " + indicateur.getId() + " dans la liste des indicateurs cochés");
+                            } else {
+                                score += indicateur.getValueIfUnCheck();
+                                System.out.println("L'id de l'indicateur : " + indicateur.getId() + " n'est pas dans la liste des indicateurs cochés");
+                            }
+                        }
+                        actionsAAfficherScore.put(action, score);
+                    } else {
+                        score = actionsAAfficherScore.get(actionEntity);
+                    }
+                    System.out.println("action : " + action.getWording());
+                    System.out.println("score : " + score);
+                    inscriptionActionService.updateScore(inscription.getId(), action.getIdAction(), score);
+                }
+            }
+            System.out.println("actionsAAfficherScore : " + actionsAAfficherScore);
+            return ResponseEntity.ok(actionsAAfficherScore);
+        } catch (MonException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
 
 
 //    @RequestMapping(value = "listeJeuxRealise.htm")

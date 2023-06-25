@@ -47,12 +47,12 @@ const routes = [
         name: 'Jouer',
         component: Jouer,
         props: (route) => ({ idJeu: route.query.idJeu, idApprenant: route.query.idApprenant })
+    },
+    {
+        path: '/mission/getAll/',
+        name: 'Mission',
+        component: Missions
     }
-    // {
-    //     path: '/mission/getAll/',
-    //     name: 'Mission',
-    //     component: Missions
-    // },
 ];
 
 const router = createRouter({

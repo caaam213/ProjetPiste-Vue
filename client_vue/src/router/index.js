@@ -8,6 +8,10 @@ import listeJeuxPossiblesApprenant from "@/views/jeu/listerJeuxPossibles.vue";
 import UtilisateurComponent from "@/components/utilisateur/UtilisateurComponent.vue";
 import Jouer from "@/views/jeu/Jouer.vue";
 import Missions from "@/views/mission/AfficherMissions.vue";
+import AfficherApprenants from "@/views/apprenant/AfficherApprenants.vue";
+import AjouterApprenant from "@/views/apprenant/AjouterApprenant.vue";
+import ModifierApprenant from "@/views/apprenant/ModifierApprenant.vue";
+
 
 
 const routes = [
@@ -47,7 +51,22 @@ const routes = [
         name: 'Jouer',
         component: Jouer,
         props: (route) => ({ idJeu: route.query.idJeu, idApprenant: route.query.idApprenant })
-    }
+    },
+    {
+        path: '/apprenant/getAll/',
+        name: 'Apprenant',
+        component: AfficherApprenants,
+    },
+    {
+        path: '/apprenant/add/',
+        name: 'AjouterApprenant',
+        component: AjouterApprenant,
+    },
+    {
+        path: '/apprenant/edit/:id',
+        name: 'MoifierApprenant',
+        component: ModifierApprenant,
+    },
     // {
     //     path: '/mission/getAll/',
     //     name: 'Mission',

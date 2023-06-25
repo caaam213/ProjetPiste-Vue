@@ -8,6 +8,8 @@ import listeJeuxPossiblesApprenant from "@/views/jeu/listerJeuxPossibles.vue";
 import UtilisateurComponent from "@/components/utilisateur/UtilisateurComponent.vue";
 import Jouer from "@/views/jeu/Jouer.vue";
 import Missions from "@/views/mission/AfficherMissions.vue";
+import AfficherResultats from "@/views/jeu/afficherResultats.vue";
+
 import AfficherApprenants from "@/views/apprenant/AfficherApprenants.vue";
 import AjouterApprenant from "@/views/apprenant/AjouterApprenant.vue";
 import ModifierApprenant from "@/views/apprenant/ModifierApprenant.vue";
@@ -58,6 +60,13 @@ const routes = [
         props: (route) => ({ idJeu: route.query.idJeu, idApprenant: route.query.idApprenant })
     },
     {
+
+        path:'/jeu/afficherResultats',
+        name: 'AfficherResultats',
+        component: AfficherResultats
+    },
+    {
+
         path: '/apprenant/getAll/',
         name: 'Apprenant',
         component: AfficherApprenants,

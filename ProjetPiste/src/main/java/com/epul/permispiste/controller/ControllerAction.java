@@ -1,7 +1,9 @@
 package com.epul.permispiste.controller;
 
 import com.epul.permispiste.domains.ActionEntity;
+import com.epul.permispiste.domains.UtilisateurEntity;
 import com.epul.permispiste.dto.ActionDTO;
+import com.epul.permispiste.dto.UtilisateurDTO;
 import com.epul.permispiste.mesExceptions.MonException;
 import com.epul.permispiste.service.ActionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,17 @@ public class ControllerAction {
 
     private HttpSession session;
 
+    @GetMapping("/getAction")
+    public ActionDTO getAction(@RequestParam("id") int id) {
+        ActionDTO action = null;
+        try {
+            action = actionService.getActionDTOById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return action;
+    }
+
     @GetMapping("/getAll/")
     public List<ActionDTO> getAllAction(HttpServletRequest request) {
         List<ActionDTO> actions = null;
@@ -41,21 +54,7 @@ public class ControllerAction {
         return actions;
     }
 
-    @GetMapping("/addForm")
-    public ResponseEntity<?> addForm(HttpServletRequest request) {
-        try {
-            HttpSession session = request.getSession();
-            if (session.getAttribute("id") == null) {
-                String message = "Vous n'êtes pas connecté !!";
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
-            } else {
-                return ResponseEntity.ok("vues/action/ajouterAction");
-            }
-        } catch (Exception e) {
-            String errorMessage = "Une erreur s'est produite lors de l'ajout de l'action";
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
-        }
-    }
+
 
     @PostMapping("/add")
     public ResponseEntity<?> addForm(HttpServletRequest request, @RequestBody ActionEntity actionData) {
@@ -75,29 +74,27 @@ public class ControllerAction {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value ="/editForm/{id}")
-    public ModelAndView edit(HttpServletRequest request, @PathVariable(value = "id") int id ) {
-        String destinationPage;
+    @PostMapping("/edit")
+    public ResponseEntity<?> edit(HttpServletRequest request, @RequestBody ActionEntity actionEntity) {
         try {
-            session = request.getSession();
-            if (session.getAttribute("id") == null) {
-                String message = "Vous n'êtes pas connecté !!";
-                request.setAttribute("message", message);
-                destinationPage = "vues/connection/login";
-            }
-            else
-            {
-                ActionEntity action = actionService.getAction(id);
-                request.setAttribute("action", action);
-                destinationPage = "/vues/action/editAction";
-            }
-        } catch (Exception e) {
-            request.setAttribute("MesErreurs", e.getMessage());
-            destinationPage = "/vues/Erreur";
-        }
+            actionService.editAction(actionEntity);
+            return ResponseEntity.ok("Action modifié avec succès");
 
-        // Redirection vers la page jsp appropriee
-        return new ModelAndView(destinationPage);
+        } catch (Exception e) {
+            String errorMessage = "Une erreur s'est produite lors de la modification de l'action";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
+    }
+
+    @GetMapping(value = "/delete")
+    public void delete(HttpServletRequest request,@RequestParam("id") int id){
+        try
+        {
+            actionService.delete(id);
+        }
+        catch (MonException e) {
+            ResponseEntity.notFound().build();
+        }
     }
 //
 //    @RequestMapping(method = RequestMethod.POST, value ="/edit")

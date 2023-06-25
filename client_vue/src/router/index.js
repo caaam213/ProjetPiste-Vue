@@ -14,6 +14,7 @@ import AfficherApprenants from "@/views/apprenant/AfficherApprenants.vue";
 import AjouterApprenant from "@/views/apprenant/AjouterApprenant.vue";
 import ModifierApprenant from "@/views/apprenant/ModifierApprenant.vue";
 import Accueil from "@/views/Accueil.vue";
+import ModifierAction from "@/views/action/ModifierAction.vue";
 
 
 
@@ -37,6 +38,11 @@ const routes = [
         path: "/action/add",
         name: "AjouterAction",
         component: AjouterAction
+    },
+    {
+        path: "/action/edit/:id",
+        name: "ModifierAction",
+        component: ModifierAction
     },
     {
         path: "/jeu/choixApprenant",

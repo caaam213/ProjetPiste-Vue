@@ -4,7 +4,7 @@
         <h1>Affichage des actions</h1>
         <div class="">
             <p>Ajouter une action</p>
-            <router-link class="btn btn-primary" to="/action/addForm">Ajouter</router-link>
+            <router-link class="btn btn-primary" to="/action/add">Ajouter</router-link>
         </div>
 
         <table class="table table-striped">
@@ -18,12 +18,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="action in actions" :key="action.id">
+            <tr v-for="action in actions" :key="action.idAction">
                 <th>{{ action.idAction }}</th>
                 <td>{{ action.wording }}</td>
                 <td>{{ action.scoreMin }}</td>
-                <td><router-link class="btn btn-secondary" :to="'/action/editForm/' + action.id">Modifier</router-link></td>
-                <td><a class="btn btn-danger" :href="'/action/delete/' + action.id" role="button">Supprimer</a></td>
+                <td><router-link class="btn btn-secondary" :to="'/action/edit/' + action.idAction">Modifier</router-link></td>
+                <td><a v-on:click="deleteAction(action.idAction)"  class="btn btn-danger" role="button" href="/action/getAll">Supprimer</a></td>
             </tr>
             </tbody>
         </table>
@@ -48,6 +48,15 @@ export default {
                 const response = await fetch(`http://${API_PATH}/action/getAll/`);
                 const data = await response.json();
                 this.actions = data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        deleteAction: async function (id) {
+            try {
+                const response = await fetch(`http://${API_PATH}/action/delete?id=${id}`);
+                const data = await response.json();
+
             } catch (error) {
                 console.error(error);
             }

@@ -8,8 +8,6 @@ import java.util.Collection;
 public class MissionDTO {
     private int id;
     private String wording;
-    private Collection<ActionMissionEntity> actionMissions;
-    private Collection<InscriptionEntity> inscriptions;
 
     public int getId() {
         return id;
@@ -27,20 +25,6 @@ public class MissionDTO {
         this.wording = wording;
     }
 
-    public Collection<ActionMissionEntity> getActionMissions() {
-        return actionMissions;
-    }
 
-    public void setActionMissions(Collection<ActionMissionEntity> actionMissions) {
-        this.actionMissions = actionMissions;
-    }
-
-    public Collection<InscriptionEntity> getInscriptions() {
-        return inscriptions;
-    }
-
-    public void setInscriptions(Collection<InscriptionEntity> inscriptions) {
-        this.inscriptions = inscriptions;
-    }
 }
 

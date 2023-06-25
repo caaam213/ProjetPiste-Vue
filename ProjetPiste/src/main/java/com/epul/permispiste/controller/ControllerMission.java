@@ -2,6 +2,7 @@ package com.epul.permispiste.controller;
 import com.epul.permispiste.domains.MissionEntity;
 import com.epul.permispiste.dto.ActionDTO;
 import com.epul.permispiste.dto.MissionDTO;
+import com.epul.permispiste.dto.UtilisateurDTO;
 import com.epul.permispiste.service.*;
 import com.epul.permispiste.domains.*;
 import com.epul.permispiste.mesExceptions.MonException;
@@ -37,7 +38,10 @@ public class ControllerMission {
     @Autowired
     private UtilisateurService utilisateurService;
 
+
+
     private HttpSession session;
+
 
     @GetMapping("/getMission")
     public MissionDTO getMission(@RequestParam("id") int id) {
@@ -48,6 +52,51 @@ public class ControllerMission {
             e.printStackTrace();
         }
         return mission;
+    }
+
+    @GetMapping(value = "/choixApprenant")
+    public ResponseEntity<?> selectionnerApprenant() {
+        try {
+            List<UtilisateurDTO> listeApprenants = utilisateurService.getAllApprenant();
+            return ResponseEntity.ok(listeApprenants);
+        } catch (MonException e) {
+            String errorMessage = e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        } catch (Exception e) {
+            String errorMessage = e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
+    }
+
+    @GetMapping("/listeMissionApp")
+    public ResponseEntity<List<MissionDTO>> getlisteMissionApp(@RequestParam("idApprenant") int idApprenant) {
+        try {
+            List<MissionDTO> missions = missionService.findAll();
+            List<MissionDTO> missionsNonApprentie = new ArrayList<>();
+            List<MissionDTO> missionsApprentie = new ArrayList<>();
+            List<InscriptionEntity> listeInscriptionsPourUtilisateur = inscriptionService.getInscriptionsByIdUsers(idApprenant);
+
+            for (InscriptionEntity inscription : listeInscriptionsPourUtilisateur) {
+                for (MissionDTO mission : missions) {
+                    if (mission.getId() == inscription.getFkMission()) {
+                        missionsApprentie.add(mission);
+                    }
+                }
+            }
+
+            for (MissionDTO mission : missions) {
+                if (!missionsApprentie.contains(mission)) {
+                    missionsNonApprentie.add(mission);
+                }
+            }
+
+            List<MissionDTO> combinedMissions = new ArrayList<>();
+            combinedMissions.addAll(missionsNonApprentie);
+
+            return ResponseEntity.ok(combinedMissions);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/getAll/")
@@ -114,45 +163,29 @@ public class ControllerMission {
 //        return new ModelAndView(destinationPage);
 //    }
 
-    @GetMapping(value = "listeMissionApp.htm")
-    public ModelAndView getlisteMissionApp(HttpServletRequest request) throws Exception {
+
+    
+    @RequestMapping(method = RequestMethod.POST, value ="/edit")
+    public ModelAndView edit(HttpServletRequest request, HttpServletResponse response ) {
         String destinationPage;
-        List<MissionEntity> missions = null;
-        List<MissionEntity> missionsNonApprentie = new ArrayList<>();
-        List<MissionEntity> missionsApprentie = new ArrayList<>();
-        List<InscriptionEntity> listeInscriptionsPourUtilisateur = null;
-
-        //Récupération information utilisateur
-        int idApprenant = Integer.parseInt(request.getParameter("idApprenant"));
-
-
         try {
-            // On récupère toutes les inscriptions de l'apprenant
-            listeInscriptionsPourUtilisateur = inscriptionService.getInscriptionsByIdUsers(idApprenant);
-            missions = missionService.findAll();
-            //On les ajoutee dans
-            for (InscriptionEntity inscription : listeInscriptionsPourUtilisateur) {
-                for (MissionEntity mission : missions) {
-                    if (mission.getId() == inscription.getFkMission()) {
-                        missionsApprentie.add(mission);
-                    }
-                }
+            session = request.getSession();
+            if (session.getAttribute("id") == null) {
+                String message = "Vous n'êtes pas connecté !!";
+                request.setAttribute("message", message);
+                destinationPage = "vues/connection/login";
             }
-
-            // On récupère toutes les missionsNon apprise
-            for (MissionEntity mission : missions) {
-                if (!missionsApprentie.contains(mission)) {
-                    missionsNonApprentie.add(mission);
-                }
+            else
+            {
+                int id = Integer.parseInt(request.getParameter("id"));
+                String libelle = request.getParameter("libelle");
+                MissionEntity missionEntity = new MissionEntity();
+                missionEntity.setId(id);
+                missionEntity.setWording(libelle);
+                missionService.editMission(missionEntity);
+                request.setAttribute("missions", missionService.getAll());
+                destinationPage = "/vues/mission/afficherMissions";
             }
-
-
-            System.out.println("Taille liste non apprise" + missionsNonApprentie.size());
-            System.out.println("Taille liste Apprise" + missionsApprentie.size());
-            request.setAttribute("missionsApp", missionsApprentie);
-            request.setAttribute("missionsNonApp", missionsNonApprentie);
-            request.setAttribute("idApprenant", idApprenant);
-            destinationPage = "vues/mission/listMissionApp";
         } catch (Exception e) {
             request.setAttribute("MesErreurs", e.getMessage());
             destinationPage = "/vues/Erreur";
@@ -169,62 +202,38 @@ public class ControllerMission {
         missionService.delete(id);
     }
 
-        @RequestMapping(value = "ajouterApprenant.htm")
-        public void ajouterApp (HttpServletRequest request, HttpServletResponse response) throws Exception {
-            try {
-                System.out.println("Début controlleur");
-                //Récupération Information utilisateur
-                int idApprenant = Integer.parseInt(request.getParameter("idApprenant"));
-                System.out.println("idApprenant" + idApprenant);
 
-                //Récupération Information mission
-                int idMission = Integer.parseInt(request.getParameter("idMission"));
-                System.out.println("idMission" + idMission);
 
-                InscriptionEntity inscriptionEntity = inscriptionService.addNewInscription(idApprenant, idMission);
-                System.out.println("Appelle controlleur avant redirection");
-                String redirectUrl = "/mission/ajouterMissionPourInscription.htm?inscriptionId=" + inscriptionEntity.getId() +
-                        "&idApprenant=" + idApprenant + "&idMission=" + idMission;
-                response.sendRedirect(redirectUrl);
+    @PostMapping("/ajouterApprenant")
+    public ResponseEntity<String> ajouterApprenant(@RequestParam("idApprenant") int idApprenant,
+                                                   @RequestParam("idMission") int idMission) {
+        try {
+            InscriptionEntity inscriptionEntity = inscriptionService.addNewInscription(idApprenant, idMission);
+            inscriptionService.addNewInscriptionAction(idApprenant, idMission, inscriptionEntity.getId());
 
-            } catch (Exception e) {
-                request.setAttribute("MesErreurs", e.getMessage());
-                String destinationPage = "vues/Erreur";
-                RequestDispatcher dispatcher = request.getRequestDispatcher(destinationPage);
-                dispatcher.forward(request, response);
-            }
+            return ResponseEntity.ok("ok");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-
-        @RequestMapping(value = "ajouterMissionPourInscription.htm")
-        public void ajouterNewApp (HttpServletRequest request, HttpServletResponse response) throws Exception {
-            try {
-                System.out.println("Début controlleur");
-                //Récupération Information utilisateur
-                int idApprenant = Integer.parseInt(request.getParameter("idApprenant"));
-                System.out.println("idApprenant" + idApprenant);
-
-                //Récupération Information mission
-                int idMission = Integer.parseInt(request.getParameter("idMission"));
-                System.out.println("idMission" + idMission);
-
-                // Récupération id Inscription
-                int idInscription = Integer.parseInt(request.getParameter("inscriptionId"));
-                System.out.println("Inscription id" + idInscription);
-
-                inscriptionService.addNewInscriptionAction(idApprenant, idMission, idInscription);
-                System.out.println("Appelle controlleur avant redirection");
-                String redirectUrl = "/";
-                response.sendRedirect(redirectUrl);
-
-            } catch (Exception e) {
-                request.setAttribute("MesErreurs", e.getMessage());
-                String destinationPage = "vues/Erreur";
-                RequestDispatcher dispatcher = request.getRequestDispatcher(destinationPage);
-                dispatcher.forward(request, response);
-            }
-        }
-
     }
+
+//    @PostMapping("/ajouterMissionPourInscription")
+//    public ResponseEntity<String> ajouterMissionPourInscription(@RequestParam int idApprenant, @RequestParam int idMission,
+//                                                                @RequestParam int inscriptionId) {
+//        try {
+//            // Perform necessary operations
+//            inscriptionService.addNewInscriptionAction(idApprenant, idMission, inscriptionId);
+//
+//            // Create the redirect URL
+//            String redirectUrl = "/";
+//
+//            return ResponseEntity.ok(redirectUrl);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+//        }
+//    }
+
+}
 
 
 

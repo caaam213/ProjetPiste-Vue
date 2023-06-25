@@ -32,7 +32,12 @@
                         Missions
                     </a>
                     <ul class="dropdown-menu">
+<<<<<<< HEAD
                         <li><router-link to="/mission/getAll" class="nav-link">Gérer les missions</router-link></li>
+=======
+                      <!-- Je sais pas lequel supprimer -->
+                      <li><router-link to="/mission/getAll" class="nav-link">Gérer les missions</router-link></li>
+>>>>>>> 32d20c6001e255ea72cdc6dcdb1db5a71aaf341f
                         <li><a class="dropdown-item" href="/mission/choixApprenant">Affecter une mission</a></li>
                     </ul>
                 </li>

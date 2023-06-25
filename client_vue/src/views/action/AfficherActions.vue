@@ -1,13 +1,16 @@
 <template>
     <navigation></navigation>
     <div class="container">
-        <h1>Affichage des actions</h1>
-        <div class="">
-            <p>Ajouter une action</p>
-            <router-link class="btn btn-primary" to="/action/add">Ajouter</router-link>
+        <h1 class="text-center">Affichage des actions</h1>
+        <div class="mx-auto text-center mt-2">
+            <div>
+                <img width="50" height="50" src="https://img.icons8.com/external-others-maxicons/62/external-action-book-genres-others-maxicons-3.png"
+                     alt="external-action-book-genres-others-maxicons-3"/>
+                <router-link class="btn btn-primary w-25 ml-2 mt-2" to="/action/add">Ajouter</router-link>
+            </div>
         </div>
 
-        <table class="table table-striped">
+        <table class="table table-striped mt-2">
             <thead>
             <tr>
                 <th scope="col">Id</th>

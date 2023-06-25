@@ -10,7 +10,9 @@
                 <label for="scoreMinimum">Score minimum</label>
                 <input type="number" class="form-control" id="scoreMinimum" v-model="actionData.scoreMinimum" required>
             </div>
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <div class="mx-auto text-center">
+            <button type="submit" class="btn btn-primary w-25 mt-2">Enregistrer</button>
+            </div>
         </form>
         <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
         <p class="success-message" v-if="successMessage">{{ successMessage }}</p>

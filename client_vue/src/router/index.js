@@ -11,11 +11,16 @@ import Missions from "@/views/mission/AfficherMissions.vue";
 import AfficherApprenants from "@/views/apprenant/AfficherApprenants.vue";
 import AjouterApprenant from "@/views/apprenant/AjouterApprenant.vue";
 import ModifierApprenant from "@/views/apprenant/ModifierApprenant.vue";
+import Accueil from "@/views/Accueil.vue";
 
 
 
 const routes = [
-
+    {
+        path: '/',
+        name: 'Accueil',
+        component: Accueil
+    },
     {
         path: '/action/getAll/',
         name: 'Action',

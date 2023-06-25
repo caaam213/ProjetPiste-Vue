@@ -1,6 +1,6 @@
 <template>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%;">
-        <a class="navbar-brand" href="#"> Permis piste</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%;">
+        <a class="navbar-brand" href="#">Permis piste</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <form class="d-flex input-group w-auto">
                 <input
@@ -18,10 +18,10 @@
                 <li class="nav-item">
                     <router-link to="/" class="nav-link">Accueil</router-link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="userType === 'admin'">
                     <router-link to="/apprenant/getAll" class="nav-link">Apprenants</router-link>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" v-if="userType === 'admin'">
                     <a
                         class="nav-link dropdown-toggle"
                         href="#"
@@ -32,18 +32,17 @@
                         Missions
                     </a>
                     <ul class="dropdown-menu">
-                      <!-- Je sais pas lequel supprimer -->
-                      <li><router-link to="/mission/getAll" class="nav-link">Gérer les mission</router-link></li>
+                        <li><router-link to="/mission/getAll" class="nav-link">Gérer les missions</router-link></li>
                         <li><a class="dropdown-item" href="/mission/choixApprenant">Affecter une mission</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-
+                <li class="nav-item" v-if="userType === 'admin'">
+                    <!-- Ajoutez ici les éléments de navigation supplémentaires pour l'admin -->
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="userType === 'admin'">
                     <router-link to="/action/getAll" class="nav-link">Actions</router-link>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" v-if="userType === 'admin'">
                     <a
                         class="nav-link dropdown-toggle"
                         href="#"
@@ -58,15 +57,52 @@
                         <li><a class="dropdown-item" href="/jeu/choixApprenant?controllerType=voirJeu">Voir jeux réalisés</a></li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown" v-if="userType !== 'admin'">
+                    <a
+                        class="nav-link dropdown-toggle"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        Jeux
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" :href="'/jeu/listeJeuxPossiblesApprenant?idApprenant='+id">Jouer à un jeu</a></li>
+                        <li><a class="dropdown-item" href="/jeu/choixApprenant?controllerType=voirJeu">Voir jeux réalisés</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login/deconnection">Déconnexion</a>
+                    <a class="nav-link" href="#" @click="logout">Déconnexion</a>
                 </li>
             </ul>
         </div>
     </nav>
-
 </template>
 
-<style>
+<script>
+export default {
+    created() {
+        this.id = localStorage.getItem('userId')
+    },
+    methods: {
+        logout() {
+            // Supprimez le jeton d'authentification du localStorage
+            localStorage.removeItem("authToken");
 
+            // Redirigez l'utilisateur vers la page de connexion ou une autre page appropriée
+            window.location.href = "/login";
+        }
+    },
+    computed: {
+        userType() {
+            // Récupérez le type d'utilisateur à partir du localStorage
+            return localStorage.getItem("userType");
+        }
+    }
+};
+</script>
+
+<style>
+/* Ajoutez ici votre style CSS personnalisé */
 </style>

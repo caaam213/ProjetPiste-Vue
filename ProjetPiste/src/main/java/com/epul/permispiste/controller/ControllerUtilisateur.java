@@ -35,6 +35,7 @@ public class ControllerUtilisateur {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
         try {
             utilisateur = utilisateurService.getUtilisateurById(id);
+            utilisateurDTO.setType(utilisateur.getRole());
             utilisateurDTO.setIdUtilisateur(utilisateur.getNumUtil());
             utilisateurDTO.setEmail(utilisateur.getEmail());
             utilisateurDTO.setForename(utilisateur.getForename());

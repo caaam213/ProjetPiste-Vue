@@ -39,6 +39,17 @@ public class ControllerMission {
 
     private HttpSession session;
 
+    @GetMapping("/getMission")
+    public MissionDTO getMission(@RequestParam("id") int id) {
+        MissionDTO mission = null;
+        try {
+            mission = missionService.getMissionDTOById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mission;
+    }
+
     @GetMapping("/getAll/")
     public List<MissionDTO> getAll(HttpServletRequest request) {
         List<MissionDTO> missions = null;
@@ -51,25 +62,8 @@ public class ControllerMission {
         return missions;
     }
 
-    //TODO : Tester les deux fonctions sur postman
-    @RequestMapping("/addForm")
-    public ResponseEntity<?> addForm(HttpServletRequest request) {
-        try {
-            HttpSession session = request.getSession();
-            if (session.getAttribute("id") == null) {
-                String message = "Vous n'êtes pas connecté !!";
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
-            } else {
-                return ResponseEntity.ok("vues/mission/ajouterMission");
-            }
-        } catch (Exception e) {
-            String errorMessage = "Une erreur s'est produite lors de l'ajout de l'action";
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
-        }
-    }
-
     @PostMapping("/add")
-    public ResponseEntity<?> addForm(HttpServletRequest request, @RequestBody MissionEntity MissionData) {
+    public ResponseEntity<?> add(HttpServletRequest request, @RequestBody MissionDTO missionData) {
         try {
             HttpSession session = request.getSession();
 //            if (session.getAttribute("id") == null) {
@@ -77,7 +71,9 @@ public class ControllerMission {
 //                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
 //            } else {
             // TODO : Décommenter pour gérer la connexion
-            missionService.addMission(MissionData);
+            MissionEntity missionEntity = new MissionEntity();
+            missionEntity.setWording(missionData.getWording());
+            missionService.addMission(missionEntity);
             return ResponseEntity.ok("Mission ajoutée avec succès");
 //            }
         } catch (Exception e) {
@@ -86,26 +82,20 @@ public class ControllerMission {
         }
     }
 
-    //TODO : Adapter ces fonctions en API (toutes les fonctions après ce TODO )
-    @RequestMapping(method = RequestMethod.GET, value ="/editForm/{id}")
-    public ModelAndView edit(HttpServletRequest request, @PathVariable(value = "id") int id ) {
-        String destinationPage;
+    @PostMapping("/edit")
+    public ResponseEntity<?> edit(HttpServletRequest request, @RequestBody MissionEntity missionEntity) {
         try {
-            session = request.getSession();
-            if (session.getAttribute("id") == null) {
-                String message = "Vous n'êtes pas connecté !!";
-                request.setAttribute("message", message);
-                destinationPage = "vues/connection/login";
-            } else {
-                MissionEntity mission = missionService.getMissionById(id);
-                request.setAttribute("mission", mission);
-                destinationPage = "/vues/mission/editMission";
-            }
+            missionService.editMission(missionEntity);
+            return ResponseEntity.ok("Mission modifié avec succès");
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            String errorMessage = "Une erreur s'est produite lors de la modification de la mission";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         }
-        return new ModelAndView(destinationPage);
     }
+
+    //TODO : Adapter ces fonctions en API (toutes les fonctions après ce TODO )
+
 
 //    @GetMapping(value= "choixApprenant")
 //    public ModelAndView selectionnerApprenant(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -172,67 +162,11 @@ public class ControllerMission {
         return new ModelAndView(destinationPage);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value ="/edit")
-    public ModelAndView edit(HttpServletRequest request, HttpServletResponse response ) {
-        String destinationPage;
-        try {
-            session = request.getSession();
-            if (session.getAttribute("id") == null) {
-                String message = "Vous n'êtes pas connecté !!";
-                request.setAttribute("message", message);
-                destinationPage = "vues/connection/login";
-            }
-            else
-            {
-                int id = Integer.parseInt(request.getParameter("id"));
-                String libelle = request.getParameter("libelle");
-                MissionEntity missionEntity = new MissionEntity();
-                missionEntity.setId(id);
-                missionEntity.setWording(libelle);
-                missionService.editMission(missionEntity);
-                request.setAttribute("missions", missionService.getAll());
-                destinationPage = "/vues/mission/afficherMissions";
-            }
-        } catch (Exception e) {
-            request.setAttribute("MesErreurs", e.getMessage());
-            destinationPage = "/vues/Erreur";
-        }
-
-        // Redirection vers la page jsp appropriee
-        return new ModelAndView(destinationPage);
-    }
-
     //TODO : Adapter ces fonctions en API
-    @RequestMapping(method = RequestMethod.GET, value ="/delete/{id}")
-    public ModelAndView delete(HttpServletRequest request, @PathVariable(value = "id") int id ) {
-        String destinationPage;
-        try {
-            session = request.getSession();
-            if (session.getAttribute("id") == null) {
-                String message = "Vous n'êtes pas connecté !!";
-                request.setAttribute("message", message);
-                destinationPage = "vues/connection/login";
-            } else {
-                missionService.delete(id);
-                List<MissionEntity> missions = missionService.getAll();
-                if (missions.size() == 0)
-                {
-                    request.setAttribute("erreurType", "Mission");
-                    destinationPage = "/vues/aucuneDonneesVue";
-                }
-                else
-                {
-                    request.setAttribute("missions", missions);
-                    destinationPage = "/vues/mission/afficherMissions";
-                }
-            }
-        } catch (Exception e) {
-            request.setAttribute("MesErreurs", e.getMessage());
-            destinationPage = "/vues/Erreur";
-        }
-
-        // Redirection vers la page jsp appropriee
-        return new ModelAndView(destinationPage);
+    @GetMapping(value ="/delete")
+    public void delete(HttpServletRequest request, @RequestParam(value = "id") int id ) {
+        System.out.println("iddd"+id);
+        missionService.delete(id);
     }
 
         @RequestMapping(value = "ajouterApprenant.htm")

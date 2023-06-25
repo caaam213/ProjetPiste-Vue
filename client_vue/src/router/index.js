@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter } from "vue-router";
+import {createWebHistory, createRouter} from "vue-router";
 // import Menu from '../views/menu/Menu';
 import Action from '../views/action/AfficherActions.vue'
 import AjouterActionForm from "@/views/action/AjouterAction.vue";
@@ -15,10 +15,18 @@ import AjouterApprenant from "@/views/apprenant/AjouterApprenant.vue";
 import ModifierApprenant from "@/views/apprenant/ModifierApprenant.vue";
 import Accueil from "@/views/Accueil.vue";
 import ModifierAction from "@/views/action/ModifierAction.vue";
-
+import AjouterMission from "@/views/mission/AjouterMission.vue";
+import ModifierMission from "@/views/mission/ModifierMission.vue";
+import {isAuthenticated} from "@/utils/auth";
+import Login from "@/views/login/Login.vue";
 
 
 const routes = [
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
+    },
     {
         path: '/',
         name: 'Accueil',
@@ -63,7 +71,7 @@ const routes = [
         path: '/jeu/jouer',
         name: 'Jouer',
         component: Jouer,
-        props: (route) => ({ idJeu: route.query.idJeu, idApprenant: route.query.idApprenant })
+        props: (route) => ({idJeu: route.query.idJeu, idApprenant: route.query.idApprenant})
     },
     {
         path: '/mission/getAll/',
@@ -71,8 +79,18 @@ const routes = [
         component: Missions
     },
     {
+        path: "/mission/add",
+        name: "AjouterMission",
+        component: AjouterMission
+    },
+    {
+        path: "/mission/edit/:id",
+        name: "ModifierMission",
+        component: ModifierMission
+    },
+    {
 
-        path:'/jeu/afficherResultats',
+        path: '/jeu/afficherResultats',
         name: 'AfficherResultats',
         component: AfficherResultats
     },
@@ -97,6 +115,14 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.name !== "Login" && !isAuthenticated()) {
+        next({ name: "Login" });
+    } else {
+        next();
+    }
 });
 
 export default router;

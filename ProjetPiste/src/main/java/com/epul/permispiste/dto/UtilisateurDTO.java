@@ -7,6 +7,7 @@ public class UtilisateurDTO {
     private String surname;
 
     private String forename;
+    private String type;
 
     public UtilisateurDTO() {
     }
@@ -41,5 +42,13 @@ public class UtilisateurDTO {
 
     public void setForename(String forename) {
         this.forename = forename;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

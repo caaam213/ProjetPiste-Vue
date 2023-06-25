@@ -76,4 +76,12 @@ public class MissionService {
 
     public List<MissionEntity> findAll() { return missionRepository.findAll();}
     public MissionEntity findMissionById(int id) {return missionRepository.findById(id); }
+
+    public MissionDTO getMissionDTOById(int id) {
+        MissionEntity mission = missionRepository.findById(id);
+        MissionDTO missionDTO = new MissionDTO();
+        missionDTO.setId(mission.getId());
+        missionDTO.setWording(mission.getWording());
+        return missionDTO;
+    }
 }

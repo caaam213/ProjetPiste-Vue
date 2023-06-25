@@ -21,11 +21,7 @@ public class AuthentificationService implements IAuthentificationService {
         String message;
         String login = unUti.getNomUtil();
         String pwd = unUti.getMotPasse();
-        unUtilisateur = unUtilisateurRepostory.getFirstByNomUtil("Merlot");
-        System.out.println(unUtilisateurRepostory.findAll().get(0).getSurname());
-        System.out.println(unUtilisateurRepostory.findAll().get(0).getNomUtil());
-        System.out.println(unUtilisateurRepostory.findAll().get(0).getNumUtil());
-        System.out.println(unUtilisateur.getMotPasse());
+        unUtilisateur = unUtilisateurRepostory.getFirstByNomUtil(login);
         if (unUtilisateur != null) {
             try {
                 // on récupère le sel

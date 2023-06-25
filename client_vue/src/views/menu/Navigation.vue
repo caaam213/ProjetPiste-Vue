@@ -32,14 +32,13 @@
                         Missions
                     </a>
                     <ul class="dropdown-menu">
-                        <!-- Je sais pas lequel supprimer -->
-                        <li><a class="dropdown-item" href="/mission/AfficherMission">Gérer les missions</a></li>
+                      <!-- Je sais pas lequel supprimer -->
+                      <li><router-link to="/mission/getAll" class="nav-link">Gérer les mission</router-link></li>
                         <li><a class="dropdown-item" href="/mission/choixApprenant">Affecter une mission</a></li>
                     </ul>
                 </li>
-                <!-- Je sais pas lequel supprimer -->
                 <li class="nav-item">
-                  <router-link to="/mission/getAll" class="nav-link">Missions</router-link>
+
                 </li>
                 <li class="nav-item">
                     <router-link to="/action/getAll" class="nav-link">Actions</router-link>

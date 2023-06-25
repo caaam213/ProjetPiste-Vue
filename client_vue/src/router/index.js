@@ -66,6 +66,11 @@ const routes = [
         props: (route) => ({ idJeu: route.query.idJeu, idApprenant: route.query.idApprenant })
     },
     {
+        path: '/mission/getAll/',
+        name: 'Mission',
+        component: Missions
+    },
+    {
 
         path:'/jeu/afficherResultats',
         name: 'AfficherResultats',
@@ -86,12 +91,7 @@ const routes = [
         path: '/apprenant/edit/:id',
         name: 'MoifierApprenant',
         component: ModifierApprenant,
-    },
-    // {
-    //     path: '/mission/getAll/',
-    //     name: 'Mission',
-    //     component: Missions
-    // },
+    }
 ];
 
 const router = createRouter({

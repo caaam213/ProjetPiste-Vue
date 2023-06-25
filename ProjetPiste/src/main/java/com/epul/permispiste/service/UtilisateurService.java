@@ -76,7 +76,11 @@ public class UtilisateurService implements IUtilisateurService {
     }
 
     public void editApprenant(UtilisateurEntity utiisateurEntity) {
+        System.out.println("num util "+utiisateurEntity.getNumUtil());
+        System.out.println("nom "+utiisateurEntity.getForename());
         UtilisateurEntity utilisateur = utilisateurRepository.findByNumUtil(utiisateurEntity.getNumUtil());
+        System.out.println("non util "+utilisateur.getNomUtil());
+
         utilisateur.setForename(utiisateurEntity.getForename());
         utilisateur.setSurname(utiisateurEntity.getSurname());
         utilisateurRepository.save(utilisateur);

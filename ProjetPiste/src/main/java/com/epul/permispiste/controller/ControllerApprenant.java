@@ -1,41 +1,46 @@
-//package com.epul.permispiste.controller;
-//import com.epul.permispiste.domains.ApprenantEntity;
-//import com.epul.permispiste.domains.UtilisateurEntity;
-//import com.epul.permispiste.service.ApprenantService;
-//import com.epul.permispiste.service.UtilisateurService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.servlet.ModelAndView;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import javax.servlet.http.HttpSession;
-//
-//@RequestMapping("/apprenant")
-//@RestController
-//@CrossOrigin
-//public class ControllerApprenant {
-//
-//    @Autowired
-//    private ApprenantService apprenantService;
-//    @Autowired
-//    private UtilisateurService utilisateurService;
-//
-//    private HttpSession session;
-//
-//    @RequestMapping(value = "/index")
-//    public ModelAndView index(HttpServletRequest request) throws Exception {
-//        String destinationPage;
-//        try {
-//            request.setAttribute("apprenant", apprenantService.getAll());
-//            destinationPage = "/vues/apprenant/afficherApprenants";
-//        } catch (Exception e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "/vues/Erreur";
-//        }
-//        return new ModelAndView(destinationPage);
-//    }
-//
+package com.epul.permispiste.controller;
+import com.epul.permispiste.domains.ApprenantEntity;
+import com.epul.permispiste.domains.UtilisateurEntity;
+import com.epul.permispiste.dto.ActionDTO;
+import com.epul.permispiste.mesExceptions.MonException;
+import com.epul.permispiste.service.ApprenantService;
+import com.epul.permispiste.service.UtilisateurService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.List;
+
+@RequestMapping("/apprenant")
+@RestController
+@CrossOrigin
+public class ControllerApprenant {
+
+    @Autowired
+    private ApprenantService apprenantService;
+    @Autowired
+    private UtilisateurService utilisateurService;
+
+    private HttpSession session;
+
+    @GetMapping(value = "/getAll")
+    public List<ApprenantEntity> getAllApprenant(HttpServletRequest request){
+
+        List<ApprenantEntity> apprenants = null;
+        try
+        {
+            apprenants = apprenantService.getAll();
+        }
+        catch (MonException e) {
+            ResponseEntity.notFound().build();
+        }
+        return apprenants;
+    }
+
 //    @RequestMapping("/addForm")
 //    public ModelAndView addForm(HttpServletRequest request) {
 //        String destinationPage;
@@ -138,4 +143,4 @@
 //        // Redirection vers la page jsp appropriee
 //        return new ModelAndView(destinationPage);
 //    }
-//}
+}

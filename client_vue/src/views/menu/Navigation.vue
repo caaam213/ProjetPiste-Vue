@@ -19,7 +19,7 @@
                     <router-link to="/" class="nav-link">Accueil</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/utilisateur/indexApprenant" class="nav-link">Apprenants</router-link>
+                    <router-link to="/apprenant/getAll" class="nav-link">Apprenants</router-link>
                 </li>
                 <li class="nav-item dropdown">
                     <a

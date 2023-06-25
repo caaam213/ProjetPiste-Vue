@@ -3,14 +3,26 @@
         <div class="col-md-8 col-sm-8">
             <div class="blanc">
                 <h2>Jeu lancé</h2>
-                <div v-for="indicatorsActions in listeIndicateursActions" :key="indicatorsActions.action.id">
-                    <h2>{{ indicatorsActions.action.wording }}</h2>
-                    <div v-for="indicator in indicatorsActions.indicators" :key="indicator.id">
-                        <label :for="'choix' + indicator.id">{{ indicator.wording }}</label><br>
-                        <input type="checkbox" :id="'choix' + indicator.id" :value="indicator.id" v-model="selectedIndicators">
+                <form @submit.prevent="validerJeu">
+                    <input type="hidden" name="idApprenant" :value="idApprenant" />
+                    <input type="hidden" name="idJeu" :value="idJeu" />
+                    <div v-for="actionIndicateurDTO in listeIndicateursActions" :key="actionIndicateurDTO.action.id">
+                        <h2>{{ actionIndicateurDTO.action.wording }}</h2>
+                        <div v-for="indicateur in actionIndicateurDTO.indicators" :key="indicateur.id" class="checkbox-wrapper">
+                            <label :for="'choix' + indicateur.id">{{ indicateur.wording }}</label>
+                            <input type="checkbox" :id="'choix' + indicateur.id" name="checkboxesChecked" :value="indicateur.id" class="checkboxJeu" />
+                        </div>
                     </div>
-                </div>
-                <button @click="validerJeu">Valider le questionnaire</button>
+
+                    <h2>A cocher si rien ne devrait être coché</h2>
+
+                    <div class="checkbox-wrapper">
+                        <label for="choix-1">Aucun élément sélectionné</label>
+                        <input type="checkbox" id="choix-1" name="checkboxesChecked" value="-1" v-model="isAnyChecked" />
+                    </div>
+
+                    <button type="submit">Valider le questionnaire</button>
+                </form>
             </div>
         </div>
     </div>
@@ -23,6 +35,7 @@ import {API_PATH} from "@/config/config";
 export default {
     data() {
         return {
+            isAnyChecked: false,
             idApprenant: '',
             idJeu: '',
             listeIndicateursActions: [],
@@ -39,17 +52,80 @@ export default {
                 console.error(error);
             }
         },
-        validerJeu() {
-            const casesCochees = Array.from(document.querySelectorAll('input[name="actionsCheckbox"]:checked'));
-            this.selectedIndicators = casesCochees.map(checkbox => checkbox.value);
-            this.selectedIndicators = this.selectedIndicators.map(element => parseInt(element));
-            console.log(this.selectedIndicators);
-        },
+
+        // TODO : Modifier ici pour passer une LinkedHashMap
+        // validerJeu() {
+        //
+        //     const casesCochees = Array.from(document.querySelectorAll('input[name="checkboxesChecked"]:checked'));
+        //     this.checkboxesChecked = casesCochees.map(checkbox => checkbox.value);
+        //     console.log(this.checkboxesChecked);
+        //     console.log(this.idJeu);
+        //     console.log(this.idApprenant);
+        //
+        //     const requestBody = {
+        //         idJeu: this.idJeu,
+        //         idApprenant: this.idApprenant,
+        //         indicatorsCheckbox: this.checkboxesChecked,
+        //     };
+        //
+        //     axios.post(`http://${API_PATH}/jeu/validerJeu`, requestBody)
+        //         .then(response => {
+        //             const actionsAAfficherScore = Object.entries(response.data).map(([action, score]) => ({ action, score }));
+        //
+        //             const encodedActionsAAfficherScore = encodeURIComponent(JSON.stringify(actionsAAfficherScore));
+        //
+        //             this.$router.push({
+        //                 name: 'AfficherResultats',
+        //                 query: { idApprenant: this.idApprenant },
+        //                 params: { actionsAAfficherScore: actionsAAfficherScore }
+        //             });
+        //         })
+        //         .catch(error => {
+        //             console.error(error);
+        //         });
+        // },
+
     },
+
     mounted() {
         this.idApprenant = this.$route.query.idApprenant;
         this.idJeu = this.$route.query.idJeu;
         this.fetchData();
-    },
+
+        const checkboxes = document.querySelectorAll("input.checkboxJeu");
+        console.log(checkboxes);
+        const aucunElementCheckbox = document.getElementById("choix-1");
+        let isAnyChecked = false; // Déclaration de la variable ici
+
+        // Fonction pour vérifier l'état des autres checkboxes
+        // Fonction pour vérifier l'état des autres checkboxes
+        function checkOtherCheckboxes() {
+            let isAnyChecked = false; // Déclaration de la variable ici
+
+            for (let i = 0; i < checkboxes.length; i++) {
+                console.log(checkboxes[i].checked);
+                if (checkboxes[i].checked) {
+                    isAnyChecked = true;
+                    break;
+                }
+            }
+
+            // Cocher/décocher la checkbox "Aucun élément sélectionné" en fonction de l'état des autres checkboxes
+            aucunElementCheckbox.checked = isAnyChecked;
+        }
+
+// Ajouter un écouteur d'événement sur chaque autre checkbox
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", checkOtherCheckboxes);
+        });
+
+// Vérifier l'état initial des autres checkboxes lors du chargement de la page
+        checkOtherCheckboxes();
+
+    }
 };
 </script>
+
+<style>
+/* Vos styles CSS ici */
+</style>

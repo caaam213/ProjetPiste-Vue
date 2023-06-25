@@ -13,11 +13,17 @@ import AfficherResultats from "@/views/jeu/afficherResultats.vue";
 import AfficherApprenants from "@/views/apprenant/AfficherApprenants.vue";
 import AjouterApprenant from "@/views/apprenant/AjouterApprenant.vue";
 import ModifierApprenant from "@/views/apprenant/ModifierApprenant.vue";
+import Accueil from "@/views/Accueil.vue";
+import ModifierAction from "@/views/action/ModifierAction.vue";
 
 
 
 const routes = [
-
+    {
+        path: '/',
+        name: 'Accueil',
+        component: Accueil
+    },
     {
         path: '/action/getAll/',
         name: 'Action',
@@ -32,6 +38,11 @@ const routes = [
         path: "/action/add",
         name: "AjouterAction",
         component: AjouterAction
+    },
+    {
+        path: "/action/edit/:id",
+        name: "ModifierAction",
+        component: ModifierAction
     },
     {
         path: "/jeu/choixApprenant",
@@ -55,6 +66,11 @@ const routes = [
         props: (route) => ({ idJeu: route.query.idJeu, idApprenant: route.query.idApprenant })
     },
     {
+        path: '/mission/getAll/',
+        name: 'Mission',
+        component: Missions
+    },
+    {
 
         path:'/jeu/afficherResultats',
         name: 'AfficherResultats',
@@ -75,12 +91,7 @@ const routes = [
         path: '/apprenant/edit/:id',
         name: 'MoifierApprenant',
         component: ModifierApprenant,
-    },
-    // {
-    //     path: '/mission/getAll/',
-    //     name: 'Mission',
-    //     component: Missions
-    // },
+    }
 ];
 
 const router = createRouter({

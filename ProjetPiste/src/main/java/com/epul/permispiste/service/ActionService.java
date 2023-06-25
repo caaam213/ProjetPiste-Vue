@@ -31,6 +31,16 @@ public class ActionService{
     public ActionEntity getActionById(int id) {
         return actionRepository.findActionEntityById(id);
 
+
+    }
+    public ActionDTO getActionDTOById(int id) {
+        ActionEntity action =  actionRepository.findActionEntityById(id);
+        ActionDTO actionDTO = new ActionDTO();
+        actionDTO.setIdAction(action.getId());
+        actionDTO.setWording(action.getWording());
+        actionDTO.setScoreMin(action.getScoreMinimum());
+        return actionDTO;
+
     }
 
     public List<ActionDTO> getAllAction() {
@@ -56,6 +66,7 @@ public class ActionService{
     }
 
     public void editAction(ActionEntity actionEntity) {
+        System.out.println("ICI : "+actionEntity.getId());
         ActionEntity action = actionRepository.findById(actionEntity.getId()).get();
         action.setWording(actionEntity.getWording());
         action.setScoreMinimum(actionEntity.getScoreMinimum());

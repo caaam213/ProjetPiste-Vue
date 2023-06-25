@@ -1,17 +1,11 @@
-<!-- eslint-disable -->
 <template>
-
     <div>
         <header>
-            <Menu />
+            <Menu/>
         </header>
 
         <router-view></router-view>
-
-        <br/>
-
     </div>
-
 </template>
 
 <script>
@@ -21,6 +15,9 @@ export default {
     name: 'App',
     components: {
         Menu
-    }
+    },
+
 }
 </script>
+
+

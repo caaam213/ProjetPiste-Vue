@@ -2,7 +2,7 @@
     <div class="container">
         <div class="col-md-8 col-sm-8">
             <div class="blanc">
-                <div v-for="entryAction in actionsAAfficherScore" :key="entryAction.libelle">
+                <div v-for="entryAction in scores" :key="entryAction.libelle">
                     <h2>Score pour l'action {{ entryAction.libelle }} : {{ entryAction.score }}</h2>
 
                     <template v-if="entryAction.score < entryAction.scoreMinimum">
@@ -24,25 +24,38 @@
 
 <script>
 export default {
+    data() {
+        return {
+            scores: [] // Define scores as a data property
+        };
+    },
     created() {
-        // Accéder aux paramètres de la route
         const idApprenant = this.$route.query.idApprenant;
-        const actionsAAfficherScore = JSON.parse(this.$route.params.actionsAAfficherScore);
+        const encodedActionsAAfficherScore = this.$route.params.actionsAAfficherScore;
+        const decodedActionsAAfficherScore = decodeURIComponent(encodedActionsAAfficherScore);
+        const actionsAAfficherScore = JSON.parse(decodedActionsAAfficherScore);
 
-        for (let i = 0; i < actionsAAfficherScore.length; i++) {
-            actionsAAfficherScore[i].score = parseInt(actionsAAfficherScore[i].score);
-            actionsAAfficherScore[i].scoreMinimum = parseInt(actionsAAfficherScore[i].scoreMinimum);
+        for (const item of actionsAAfficherScore) {
+            const str = item.action;
+            const parts = str.split("///");
+            const part1 = parts[0]; // "Analyser panne(s)"
+            const part2 = parts[1]; // "2"
+
+            const scoreObj = {
+                libelle: part1,
+                scoreMinimum: parseInt(part2),
+                score: parseInt(item.score)
+            };
+
+            this.scores.push(scoreObj); // Add scoreObj to the scores array in data
         }
 
-        // Utiliser les paramètres dans votre logique
-        console.log(idApprenant);
         console.log(actionsAAfficherScore);
+        console.log(idApprenant);
     }
 };
 </script>
 
 <style scoped>
-/* Vos styles CSS ici */
+/* Your CSS styles here */
 </style>
-
-

@@ -1,5 +1,7 @@
 package com.epul.permispiste.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class ActionDTO {
     private int idAction;
     private String wording;

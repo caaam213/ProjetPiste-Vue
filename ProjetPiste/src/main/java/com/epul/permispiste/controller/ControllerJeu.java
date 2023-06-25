@@ -5,6 +5,7 @@ import com.epul.permispiste.domains.*;
 import com.epul.permispiste.dto.*;
 import com.epul.permispiste.mesExceptions.MonException;
 import com.epul.permispiste.service.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -227,8 +228,9 @@ public class ControllerJeu {
         return action;
     }
 
+
     @PostMapping("/validerJeu")
-    public ResponseEntity<LinkedHashMap<ActionDTO, Integer>> validerJeu(@RequestBody JeuCreationRequest jeuRequest) {
+    public ResponseEntity<LinkedHashMap<String, Integer>> validerJeu(@RequestBody JeuCreationRequest jeuRequest) {
         try {
             // Récupération des indicateurs sélectionnés
             String[] options = jeuRequest.getIndicatorsCheckbox();
@@ -271,7 +273,14 @@ public class ControllerJeu {
                 }
             }
             System.out.println("actionsAAfficherScore : " + actionsAAfficherScore);
-            return ResponseEntity.ok(actionsAAfficherScore);
+            LinkedHashMap<String, Integer> renvoi = new LinkedHashMap<>();
+            for (Map.Entry<ActionDTO, Integer> entry : actionsAAfficherScore.entrySet()) {
+                ActionDTO key = entry.getKey();
+                String str = key.getWording() + "///" + key.getScoreMin();
+                Integer value = entry.getValue();
+                renvoi.put(str, value);
+            }
+            return ResponseEntity.ok(renvoi);
         } catch (MonException e) {
             return ResponseEntity.badRequest().body(null);
         } catch (Exception e) {

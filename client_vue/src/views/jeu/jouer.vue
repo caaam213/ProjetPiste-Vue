@@ -54,36 +54,38 @@ export default {
         },
 
         // TODO : Modifier ici pour passer une LinkedHashMap
-        // validerJeu() {
-        //
-        //     const casesCochees = Array.from(document.querySelectorAll('input[name="checkboxesChecked"]:checked'));
-        //     this.checkboxesChecked = casesCochees.map(checkbox => checkbox.value);
-        //     console.log(this.checkboxesChecked);
-        //     console.log(this.idJeu);
-        //     console.log(this.idApprenant);
-        //
-        //     const requestBody = {
-        //         idJeu: this.idJeu,
-        //         idApprenant: this.idApprenant,
-        //         indicatorsCheckbox: this.checkboxesChecked,
-        //     };
-        //
-        //     axios.post(`http://${API_PATH}/jeu/validerJeu`, requestBody)
-        //         .then(response => {
-        //             const actionsAAfficherScore = Object.entries(response.data).map(([action, score]) => ({ action, score }));
-        //
-        //             const encodedActionsAAfficherScore = encodeURIComponent(JSON.stringify(actionsAAfficherScore));
-        //
-        //             this.$router.push({
-        //                 name: 'AfficherResultats',
-        //                 query: { idApprenant: this.idApprenant },
-        //                 params: { actionsAAfficherScore: actionsAAfficherScore }
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.error(error);
-        //         });
-        // },
+        validerJeu() {
+
+            const casesCochees = Array.from(document.querySelectorAll('input[name="checkboxesChecked"]:checked'));
+            this.checkboxesChecked = casesCochees.map(checkbox => checkbox.value);
+            console.log(this.checkboxesChecked);
+            console.log(this.idJeu);
+            console.log(this.idApprenant);
+
+            const requestBody = {
+                idJeu: this.idJeu,
+                idApprenant: this.idApprenant,
+                indicatorsCheckbox: this.checkboxesChecked,
+            };
+
+            axios.post(`http://${API_PATH}/jeu/validerJeu`, requestBody)
+                .then(response => {
+                    const actionsAAfficherScore = Object.entries(response.data).map(([action, score]) => ({ action, score }));
+
+                    // Encodez les données pour les passer en tant que paramètre URL
+                    const encodedActionsAAfficherScore = encodeURIComponent(JSON.stringify(actionsAAfficherScore));
+
+                    // Redirigez vers la page 'AfficherResultats' avec les données en tant que paramètre
+                    this.$router.push({
+                        name: 'AfficherResultats',
+                        query: { idApprenant: this.idApprenant },
+                        params: { actionsAAfficherScore: encodedActionsAAfficherScore }
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        },
 
     },
 

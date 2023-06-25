@@ -288,63 +288,42 @@ public class ControllerJeu {
         }
     }
 
+    @GetMapping("/listeJeuxRealise")
+    public ResponseEntity<?> getJeuxRealise(@RequestParam("idApprenant") int idApprenant) {
+        try {
+            System.out.println("arrivée liste jeu");
+            System.out.println("Trouver jeu : " + jeuService.getAllJeu());
 
+            List<UtilisateurJeuEntity> listeJeuxPourUtilisateur = null;
+            UtilisateurEntity utilisateurs = null;
+            List<JeuEntity> listeJeux;
 
-//    @RequestMapping(value = "listeJeuxRealise.htm")
-//    public ModelAndView getJeuxRealise(HttpServletRequest request, HttpServletResponse response) throws Exception
-//    {
-//        System.out.println("arrivée liste jeu");
-//        String destinationPage = "";
-//        int idUser = Integer.parseInt(request.getParameter("idApprenant"));
-//        System.out.println("Trouver jeu : " + jeuService.getAllJeu());
-//
-//        List<UtilisateurJeuEntity> listeJeuxPourUtilisateur = null;
-//        UtilisateurEntity Utilisateurs = null;
-//        List<JeuEntity> listeJeux;
-//
-//        try {
-//            System.out.println("idUser: " + idUser);
-//            listeJeuxPourUtilisateur = unUtilisateurJeuService.getInscriptionByUsers(idUser);
-//
-//            if (listeJeuxPourUtilisateur.size()!=0 || listeJeuxPourUtilisateur != null)
-//            {
-//                System.out.println("liste jeux : " + listeJeuxPourUtilisateur.get(0));
-//
-//                // Récupérer les informations des jeux associés
-//                listeJeux = new ArrayList<>();
-//                for (UtilisateurJeuEntity jeu : listeJeuxPourUtilisateur) {
-//                    //On récupère le jeu grâce à son id
-//                    JeuEntity jeuEntity = jeuService.getJeubyID(jeu.getFkJeu());
-//                    //On récupère les actions lié au jeu
-//                    listeJeux.add(jeuEntity);
-//                    Utilisateurs = ServiceUtilisateur.getUserByFkKey(idUser);
-//                }
-//                request.setAttribute("Utilisateur", Utilisateurs);
-//                request.setAttribute("controllerType", "getJeuxRealise");
-//                request.setAttribute("listeJeux", listeJeux);
-//                request.setAttribute("listeJeuxRealise", listeJeuxPourUtilisateur);
-//                destinationPage = "vues/jeu/listeJeuxRealise";
-//            }
-//            else
-//            {
-//                request.setAttribute("erreurType", "afficherJeuApprenant");
-//                request.setAttribute("nom_prenom", Utilisateurs.getForename()+" "+Utilisateurs.getSurname());
-//                destinationPage = "vues/aucuneDonneesVue";
-//            }
-//
-//        }
-//        catch (IndexOutOfBoundsException e)
-//        {
-//            request.setAttribute("erreurType", "afficherJeuApprenant");
-//            destinationPage = "vues/aucuneDonneesVue";
-//        }
-//
-//        catch (MonException e) {
-//            request.setAttribute("MesErreurs", e.getMessage());
-//            destinationPage = "/vues/Erreur";
-//        }
-//        return new ModelAndView(destinationPage);
-//    }
+            System.out.println("idUser: " + idApprenant);
+            listeJeuxPourUtilisateur = unUtilisateurJeuService.getInscriptionByUsers(idApprenant);
+
+            if (listeJeuxPourUtilisateur.size() != 0 || listeJeuxPourUtilisateur != null) {
+                System.out.println("liste jeux : " + listeJeuxPourUtilisateur.get(0));
+
+                // Récupérer les informations des jeux associés
+                listeJeux = new ArrayList<>();
+                for (UtilisateurJeuEntity jeu : listeJeuxPourUtilisateur) {
+                    // On récupère le jeu grâce à son id
+                    JeuEntity jeuEntity = jeuService.getJeubyID(jeu.getFkJeu());
+                    // On récupère les actions liées au jeu
+                    listeJeux.add(jeuEntity);
+                    utilisateurs = ServiceUtilisateur.getUserByFkKey(idApprenant);
+                }
+
+                return ResponseEntity.ok(listeJeux);
+            } else {
+                String errorMessage = "Aucune donnée disponible.";
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(errorMessage);
+            }
+        } catch (Exception e) {
+            String errorMessage = "Erreur lors de la récupération des jeux réalisés.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
+    }
 }
 //
 //
